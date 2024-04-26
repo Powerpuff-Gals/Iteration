@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
-
 import logo from '../assets/wobbe_mascot2.png';
 
 function Login(props) {
@@ -57,9 +56,10 @@ function Login(props) {
     login();
   }
 
-  const handleGithubLogin = () => {
+  // const handleGithubLogin = () => {
 
-  };
+  // };
+
   // const options = {
   //   method: 'GET',
   //   headers: {
@@ -69,6 +69,7 @@ function Login(props) {
   //    "Access-Control-Allow-Origin": 'http://localhost:8080',
   //   }
   // }
+
   useEffect(() => {
     if (user) {
       fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
@@ -285,12 +286,12 @@ function Login(props) {
         </div> */}
 
         {/* <div class="g-signin2" data-onsuccess="onSignIn"></div> */}
-        <button
+        {/* <button
           onClick={handleGithubLogin}
           className="w-full bg-teal-500 hover:bg-teal-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-teal-300 focus:ring-offset-2"
         >
           Sign in with GitHub
-        </button>
+        </button> */}
         <footer id="login-footer" className="text-center text-gray-700 mt-4">
           Don't have an account?{' '}
           <a
