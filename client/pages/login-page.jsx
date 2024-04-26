@@ -41,7 +41,7 @@ function Login(props) {
     navigate('/signup');
   };
 
-  const [ user, setUser ] = useState([]);
+  const [ user, setUser ] = useState(null);
   const [ profile, setProfile ] = useState([]);
 
   const login = useGoogleLogin({
@@ -52,18 +52,20 @@ function Login(props) {
       onError: (error) => console.log('Login Failed:', error)
   });
 
-  // function googleOnClick() {
-  //   login();
-  // }
-  const options = {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.access_token}`,
-      Accept: 'application/json',
-     "Cross-Origin-Opener-Policy": 'same-origin',
-     "Access-Control-Allow-Origin": 'http://localhost:8080',
-    }
+  const googleOnClick =() => {
+    login();
   }
+
+
+  // const options = {
+  //   method: 'GET',
+  //   headers: {
+  //     Authorization: `Bearer ${user.access_token}`,
+  //     Accept: 'application/json',
+  //    "Cross-Origin-Opener-Policy": 'same-origin',
+  //    "Access-Control-Allow-Origin": 'http://localhost:8080',
+  //   }
+  // }
   useEffect(() => {
     if (user) {
       fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
@@ -87,8 +89,8 @@ function Login(props) {
           })
           .catch((err) => console.log(err));
     };
-    console.log(user);
-    console.log(profile);
+    // console.log(user);
+    // console.log(profile);
   }, [user])
 
   function googleEmail(email) {
@@ -245,7 +247,7 @@ function Login(props) {
         </button>
 
         <div className='w-full mt-2'>
-          <button aria-label="Sign in with Google" onClick={login} className="flex w-full justify-center items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3">
+          <button aria-label="Sign in with Google" onClick={googleOnClick} className="flex w-full justify-center items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3">
             <div className="flex items-center justify-center bg-white w-9 h-9 rounded-l">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5">
                 <title>Sign in with Google</title>
