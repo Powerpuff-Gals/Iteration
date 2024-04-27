@@ -31,25 +31,31 @@ indeedController.searchIndeed = async (req, res, next) => {
       const results = [];
 
       jobElements.forEach(jobElement => {
-        const jobTitle = jobElement
-          .querySelector('.jobTitle')
-          .textContent.trim();
-        console.log(jobTitle);
+        const jobTitleElement = jobElement.querySelector('.jobTitle');
+
+        const jobTitle = jobTitleElement
+          ? jobTitleElement.textContent.trim()
+          : 'Job title not found';
+        // const jobTitle = jobElement.querySelector('.jobTitle').textContent.trim();
+        // console.log(jobTitle);
 
         const priceTitleElement = jobElement.querySelector(
           '.metadata.salary-snippet-container'
         );
-        let priceTitle;
+        // let priceTitle;
 
-        if (priceTitleElement !== null) {
-          const childPriceElement = priceTitleElement.querySelector(
-            '.css-1cvo3fd.eu4oa1w0'
-          );
+        // if (priceTitleElement !== null) {
+        //   const childPriceElement = priceTitleElement.querySelector(
+        //     '.css-1cvo3fd.eu4oa1w0'
+        //   );
 
-          priceTitle = childPriceElement.textContent.trim();
-        } else {
-          priceTitle = 'Salary not found';
-        }
+        //   priceTitle = childPriceElement.textContent.trim();
+        // } else {
+        //   priceTitle = 'Salary not found';
+        // }
+        const priceTitle = priceTitleElement
+          ? priceTitleElement.textContent.trim()
+          : 'N/A';
 
         const quickApplyLinkElement = jobElement.querySelector(
           'a.jcs-JobTitle.css-jspxzf.eu4oa1w0'
@@ -85,10 +91,9 @@ indeedController.searchIndeed = async (req, res, next) => {
     await browser.close();
     next();
   } catch (error) {
-    return next({
-      log: 'IndeedController error handler caught error in authController.createUser',
-      status: 500,
-      message: error.msg,
+    next({
+      log: 'Error in indeedController',
+      message: { error: 'Error in indeedController' },
     });
   }
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin, useGoogleLogin, googleLogout } from '@react-oauth/google';
+import { useGoogleLogin, googleLogout } from '@react-oauth/google';
 import logo from '../assets/wobbe_mascot2.png';
 
 function Login(props) {
@@ -41,7 +41,7 @@ function Login(props) {
     navigate('/signup');
   };
 
-  const [ user, setUser ] = useState([]);
+  const [ user, setUser ] = useState(null);
   const [ profile, setProfile ] = useState([]);
 
   const login = useGoogleLogin({
@@ -52,18 +52,24 @@ function Login(props) {
       onError: (error) => console.log('Login Failed:', error)
   });
 
-  // function googleOnClick() {
-  //   login();
-  // }
-  const options = {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.access_token}`,
-      Accept: 'application/json',
-     "Cross-Origin-Opener-Policy": 'same-origin',
-     "Access-Control-Allow-Origin": 'http://localhost:8080',
-    }
+  const googleOnClick =() => {
+    login();
   }
+
+  // const handleGithubLogin = () => {
+
+  // };
+
+  // const options = {
+  //   method: 'GET',
+  //   headers: {
+  //     Authorization: `Bearer ${user.access_token}`,
+  //     Accept: 'application/json',
+  //    "Cross-Origin-Opener-Policy": 'same-origin',
+  //    "Access-Control-Allow-Origin": 'http://localhost:8080',
+  //   }
+  // }
+
   useEffect(() => {
     if (user) {
       fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
@@ -87,8 +93,8 @@ function Login(props) {
           })
           .catch((err) => console.log(err));
     };
-    console.log(user);
-    console.log(profile);
+    // console.log(user);
+    // console.log(profile);
   }, [user])
 
   function googleEmail(email) {
@@ -245,7 +251,7 @@ function Login(props) {
         </button>
 
         <div className='w-full mt-2'>
-          <button aria-label="Sign in with Google" onClick={login} className="flex w-full justify-center items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3">
+          <button aria-label="Sign in with Google" onClick={googleOnClick} className="flex w-full justify-center items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3">
             <div className="flex items-center justify-center bg-white w-9 h-9 rounded-l">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5">
                 <title>Sign in with Google</title>
@@ -280,7 +286,12 @@ function Login(props) {
         </div> */}
 
         {/* <div class="g-signin2" data-onsuccess="onSignIn"></div> */}
-
+        {/* <button
+          onClick={handleGithubLogin}
+          className="w-full bg-teal-500 hover:bg-teal-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-teal-300 focus:ring-offset-2"
+        >
+          Sign in with GitHub
+        </button> */}
         <footer id="login-footer" className="text-center text-gray-700 mt-4">
           Don't have an account?{' '}
           <a
