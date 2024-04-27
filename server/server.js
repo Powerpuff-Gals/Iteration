@@ -9,6 +9,7 @@ const indeedController = require('./controllers/indeedController');
 const shuffleController = require('./controllers/shuffleController');
 
 const mongoose = require('mongoose');
+const linkedinController = require('./controllers/linkedinController');
 
 mongoose.connect(
   'mongodb+srv://wilson7chen:codesmith@scratch.67upbfi.mongodb.net/?retryWrites=true&w=majority&appName=Scratch'
@@ -24,7 +25,6 @@ mongoose.connection.once('open', () => {
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, './../client')));
-
 
 app.use(cors());
 
@@ -60,19 +60,21 @@ app.post('/signup', authController.createUser, (req, res) => {
 
 // app.get('/home', (req, res) => {
 //   console.log('inside HOME route');
-  // return res.status(200).sendFile(path.join(__dirname, '../client/app.js'));
+// return res.status(200).sendFile(path.join(__dirname, '../client/app.js'));
 // });
 
 app.post(
   '/search',
   searchController.searchZipRecruiter,
   indeedController.searchIndeed,
+  linkedinController.searchLinkedin,
   shuffleController.shuffleResults,
   (req, res) => {
     console.log(
       'inside ANON SEARCH route--->',
       res.locals.zipResults[0],
-      res.locals.indeedResults[0]
+      res.locals.indeedResults[0],
+      res.locals.linkedinResults[0]
     );
 
     return res.status(200).send(res.locals.finalResults);
@@ -89,18 +91,25 @@ app.post('/editpassword', authController.updatePassword, (req, res) => {
   return res.status(200).json(res.locals.data);
 });
 
-app.post('/editprofile', authController.updatePassword, authController.updateEmail, (req, res) => {
-  console.log('inside EDIT Profile route');
-  return res.status(200).json(res.locals.data);
-});
+app.post(
+  '/editprofile',
+  authController.updatePassword,
+  authController.updateEmail,
+  (req, res) => {
+    console.log('inside EDIT Profile route');
+    return res.status(200).json(res.locals.data);
+  }
+);
 
 app.use((req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, "../build/index.html"), (err) => {
+  return res
+    .status(200)
+    .sendFile(path.join(__dirname, '../build/index.html'), err => {
       if (err) {
-          console.log(err);
-          return res.status(500).send("An error occurred");
+        console.log(err);
+        return res.status(500).send('An error occurred');
       }
-});
+    });
 });
 
 // 404 handler
