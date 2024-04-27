@@ -56,32 +56,6 @@ function Login(props) {
     login();
   }
 
-  const handleGithubLogin = () => {
-    const clientID = '6dae5c0c009f319f4252';
-    const redirectURI = 'http://localhost:8080/auth/github/callback';
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
-  };
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    
-    if (code) {
-      fetch('http://localhost:8080/auth/github/callback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'applicatoin/json' },
-        body: JSON.stringify({ code }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('data --->', data);
-        setProfile(data);
-        console.log('data.email --->', data.email);
-      })
-      .catch((err) => console.log(err));
-    }
-  })
-
   useEffect(() => {
     if (user) {
       fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
@@ -126,6 +100,121 @@ function Login(props) {
       document.getElementById('passwordImage').setAttribute('src', 'https://media.geeksforgeeks.org/wp-content/uploads/20210917145551/eye.png')
     }
   }
+
+  // GitHub OAuth configuration
+  const GITHUB_CLIENT_ID = '6dae5c0c009f319f4252';
+  const GITHUB_CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
+  const GITHUB_CALLBACK_URL = 'http://localhost:8080/auth/github/callback';
+  const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user`;
+
+  const handleGithubLogin = async (code) => {
+    try {
+      const data = await fetch('https://github.com/login/oauth/access_token', {
+        method: 'POST',
+        body: JSON.stringify({
+          client_id: GITHUB_CLIENT_ID,
+          client_secret: GITHUB_CLIENT_SECRET,
+          code,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => response.json());
+      console.log('data', data);
+      const accessToken = data.access_token;
+  
+      // Fetch the user's Github profile
+      const userProfileResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'User-Agent': 'Wobbejobs'
+        }
+      });
+  
+      // Handle the user profile data
+      const userProfileData = await userProfileResponse.json();
+      console.log(`Welcome, ${userProfileData.name}`);
+      navigate('/home');
+    } catch (error) {
+      console.log('Error in GithubLogin', error);
+    }
+  };
+  
+  const handleGitHubCallback = () => {
+    const queryString = window.location.search;
+    console.log('query string', queryString)
+    const urlParams = new URLSearchParams(queryString);
+    console.log('urlParams', urlParams)
+    const code = urlParams.get('code');
+    console.log('code', code);
+  
+    if (code) {
+      handleGithubLogin(code);
+    }
+  };
+  
+  useEffect(() => {
+    handleGitHubCallback();
+  }, []);
+  
+  
+  // useEffect(() => {
+  //   // Check for code parameter in URL
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const code = urlParams.get('code');
+    
+  //   if (code) {
+  //     // exchange code for access token
+  //     fetch('http://localhost:8080/auth/github/callback', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ code }),
+  //     })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       console.log('GitHub login response:', data)
+  //       navigate('/home');
+  //     })
+  //     .catch(error => {
+  //       console.log('Github login error:', error);
+  //     })
+  //   }
+  // }, [navigate]) 
+
+  // const handleGithubLogin = () => {
+  //   console.log('Attempting GitHub login...');
+
+  //   const clientID = '6dae5c0c009f319f4252';
+  //   const redirectURI = 'http://localhost:8080/auth/github/callback';
+  //   window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
+    
+  // };
+
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const code = urlParams.get('code');
+  //   console.log('code --->', code);
+
+  //   if (code) {
+  //     fetch('http://localhost:8080/auth/github/callback', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ code }),
+  //     })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log('data --->', data);
+  //       // setProfile(data);
+  //       console.log('data.email --->', data.email);
+  //       navigate('/home');
+  //     })
+  //     .catch((err) => console.log(err));
+  //   }
+  // })
+
+
+  
 
   // log out function to log the user out of google and set the profile array to null
   // const logOut = () => {
@@ -299,11 +388,11 @@ function Login(props) {
 
         {/* <div class="g-signin2" data-onsuccess="onSignIn"></div> */}
         <button
-          onClick={handleGithubLogin}
-          className="w-full bg-teal-500 hover:bg-teal-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-teal-300 focus:ring-offset-2"
-        >
-          Sign in with GitHub
-        </button>
+        onClick={() => { window.location.href = githubOAuthURL; }}
+        className="w-full bg-teal-500 hover:bg-teal-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-teal-300 focus:ring-offset-2"
+      >
+        Sign in with GitHub
+      </button>
         <footer id="login-footer" className="text-center text-gray-700 mt-4">
           Don't have an account?{' '}
           <a

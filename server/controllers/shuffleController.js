@@ -3,11 +3,18 @@ const shuffleController = {};
 shuffleController.shuffleResults = (req, res, next) => {
   console.log(
     'inside shuffle controller',
-    Math.max(res.locals.zipResults.length || res.locals.indeedResults.length)
+    Math.max(
+      res.locals.zipResults.length ||
+        res.locals.indeedResults.length ||
+        res.locals.linkedinResults.length
+    )
+    // Math.max(
+    //   res.locals.linkedinResults.length || res.locals.indeedResults.length
+    // )
   );
 
   function alternateResults(...arrays) {
-    const maxLength = Math.max(...arrays.map((arr) => arr.length));
+    const maxLength = Math.max(...arrays.map(arr => arr.length));
     const finalResults = [];
     for (let i = 0; i < maxLength; i++) {
       for (const array of arrays) {
@@ -22,7 +29,8 @@ shuffleController.shuffleResults = (req, res, next) => {
 
   res.locals.finalResults = alternateResults(
     res.locals.zipResults,
-    res.locals.indeedResults
+    res.locals.indeedResults,
+    res.locals.linkedinResults
   );
   console.log(
     'FINAL Results from shuffle --->',
