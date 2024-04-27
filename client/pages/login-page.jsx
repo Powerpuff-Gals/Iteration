@@ -56,19 +56,31 @@ function Login(props) {
     login();
   }
 
-  // const handleGithubLogin = () => {
+  const handleGithubLogin = () => {
+    const clientID = '6dae5c0c009f319f4252';
+    const redirectURI = 'http://localhost:8080/auth/github/callback';
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
+  };
 
-  // };
-
-  // const options = {
-  //   method: 'GET',
-  //   headers: {
-  //     Authorization: `Bearer ${user.access_token}`,
-  //     Accept: 'application/json',
-  //    "Cross-Origin-Opener-Policy": 'same-origin',
-  //    "Access-Control-Allow-Origin": 'http://localhost:8080',
-  //   }
-  // }
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+    if (code) {
+      fetch('http://localhost:8080/auth/github/callback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'applicatoin/json' },
+        body: JSON.stringify({ code }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('data --->', data);
+        setProfile(data);
+        console.log('data.email --->', data.email);
+      })
+      .catch((err) => console.log(err));
+    }
+  })
 
   useEffect(() => {
     if (user) {
@@ -286,12 +298,12 @@ function Login(props) {
         </div> */}
 
         {/* <div class="g-signin2" data-onsuccess="onSignIn"></div> */}
-        {/* <button
+        <button
           onClick={handleGithubLogin}
           className="w-full bg-teal-500 hover:bg-teal-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-teal-300 focus:ring-offset-2"
         >
           Sign in with GitHub
-        </button> */}
+        </button>
         <footer id="login-footer" className="text-center text-gray-700 mt-4">
           Don't have an account?{' '}
           <a
