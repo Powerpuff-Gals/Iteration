@@ -9,7 +9,8 @@ authController.createUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (email === '' || password === '') {
-      throw {msg :'need to enter both email & password to create new user' }
+      throw new Error('Missing fields on some markets')
+     // throw {msg :'need to enter both email & password to create new user' }
     }
       console.log('Email and password provided');
       const user = await Auth.create({

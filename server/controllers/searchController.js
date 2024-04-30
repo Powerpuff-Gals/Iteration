@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
-const RecaptchaPlugin = require('puppeteer-extra-plugin-recaptcha');
+//const RecaptchaPlugin = require('puppeteer-extra-plugin-recaptcha');
 puppeteer.use(StealthPlugin());
 
 const searchController = {};
