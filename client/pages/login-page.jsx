@@ -104,61 +104,79 @@ function Login(props) {
   // GitHub OAuth configuration
   const GITHUB_CLIENT_ID = '6dae5c0c009f319f4252';
   const GITHUB_CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
-  const GITHUB_CALLBACK_URL = 'http://localhost:8080/auth/github/callback';
-  const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user`;
+  const GITHUB_CALLBACK_URL = 'http://localhost:8080/callback';
+  const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
+  const GITHUB_AUTH_CODE_SERVER = 'https://github.com/login/oauth/authorize';
+  const GITHUB_AUTH_TOKEN_SERVER = 'https://github.com/login/oauth/access_token';
+  const GITHUB_API_SERVER = '/user';
+  const AUTHORIZATION_CODE_URL = `${GITHUB_AUTH_CODE_SERVER}?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
 
-  const handleGithubLogin = async (code) => {
-    try {
-      const data = await fetch('https://github.com/login/oauth/access_token', {
-        method: 'POST',
-        body: JSON.stringify({
-          client_id: GITHUB_CLIENT_ID,
-          client_secret: GITHUB_CLIENT_SECRET,
-          code,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => response.json());
-      console.log('data', data);
-      const accessToken = data.access_token;
-  
-      // Fetch the user's Github profile
-      const userProfileResponse = await fetch('https://api.github.com/user', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'User-Agent': 'Wobbejobs'
-        }
-      });
-  
-      // Handle the user profile data
-      const userProfileData = await userProfileResponse.json();
-      console.log(`Welcome, ${userProfileData.name}`);
-      navigate('/home');
-    } catch (error) {
-      console.log('Error in GithubLogin', error);
-    }
+  const handleGithubLogin = () => {
+    // window.location.assign(AUTHORIZATION_CODE_URL);
+    const redirectUri = encodeURIComponent(GITHUB_CALLBACK_URL);
+    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}`;
+
+    window.location.href = githubOAuthURL;
   };
   
-  const handleGitHubCallback = () => {
-    const queryString = window.location.search;
-    console.log('query string', queryString)
-    const urlParams = new URLSearchParams(queryString);
-    console.log('urlParams', urlParams)
-    const code = urlParams.get('code');
-    console.log('code', code);
+  // const handleGithubLogin = AUTHORIZATION_CODE_URL;
+
+  // Third try
+
+  // const handleGithubLogin = async (code) => {
+  //   try {
+  //     const data = await fetch('https://github.com/login/oauth/access_token', {
+  //       method: 'POST',
+  //       body: JSON.stringify({
+  //         client_id: GITHUB_CLIENT_ID,
+  //         client_secret: GITHUB_CLIENT_SECRET,
+  //         code,
+  //       }),
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       }
+  //     })
+  //     const response = await data.json();
+  //     console.log('data', response);
+  //     const accessToken = response.access_token;
   
-    if (code) {
-      handleGithubLogin(code);
-    }
-  };
+  //     // Fetch the user's Github profile
+  //     const userProfileResponse = await fetch('https://api.github.com/user', {
+  //       headers: {
+  //         'Authorization': `Bearer ${accessToken}`,
+  //         'User-Agent': 'Wobbejobs'
+  //       }
+  //     });
   
-  useEffect(() => {
-    handleGitHubCallback();
-  }, []);
+  //     // Handle the user profile data
+  //     const userProfileData = await userProfileResponse.json();
+  //     console.log(`Welcome, ${userProfileData.name}`);
+  //     navigate('/home');
+  //   } catch (error) {
+  //     console.log('Error in GithubLogin', error);
+  //   }
+  // };
   
+  // const handleGitHubCallback = () => {
+  //   const queryString = window.location.search;
+  //   console.log('query string', queryString)
+  //   const urlParams = new URLSearchParams(queryString);
+  //   console.log('urlParams', urlParams)
+  //   const code = urlParams.get('code');
+  //   console.log('code', code);
   
+  //   if (code) {
+  //     handleGithubLogin(code);
+  //   }
+  // };
+  
+  // useEffect(() => {
+  //   handleGitHubCallback();
+  // }, []);
+  
+
+  // second try
+
   // useEffect(() => {
   //   // Check for code parameter in URL
   //   const urlParams = new URLSearchParams(window.location.search);
@@ -181,6 +199,9 @@ function Login(props) {
   //     })
   //   }
   // }, [navigate]) 
+
+
+  // First try
 
   // const handleGithubLogin = () => {
   //   console.log('Attempting GitHub login...');
@@ -388,7 +409,8 @@ function Login(props) {
 
         {/* <div class="g-signin2" data-onsuccess="onSignIn"></div> */}
         <button
-        onClick={() => { window.location.href = githubOAuthURL; }}
+        // onClick={() => { window.location.href = githubOAuthURL; }}
+        onClick={handleGithubLogin}
         className="w-full bg-teal-500 hover:bg-teal-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-teal-300 focus:ring-offset-2"
       >
         Sign in with GitHub
