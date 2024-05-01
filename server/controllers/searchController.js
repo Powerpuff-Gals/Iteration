@@ -1,6 +1,10 @@
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+<<<<<<< HEAD
 //const RecaptchaPlugin = require('puppeteer-extra-plugin-recaptcha');
+=======
+// const RecaptchaPlugin = require('puppeteer-extra-plugin-recaptcha');
+>>>>>>> 561c82053ab21972d177f124796f00ac4355e0a9
 puppeteer.use(StealthPlugin());
 
 const searchController = {};
@@ -88,7 +92,7 @@ searchController.searchZipRecruiter = async (req, res, next) => {
   } catch (error) {
     next({
       log: 'Error in searchController',
-      message: { error: 'Error in searchController'}
+      message: { error: 'Error in searchController' },
     });
   }
 };
