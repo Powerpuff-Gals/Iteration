@@ -40,11 +40,11 @@ const Callback = (props) => {
           navigate('/home');
         } else {
           // Handle error cases
-          console.error('Error: Unable to fetch BE github data');
+          console.log('Error: Unable to fetch BE github data');
         }
         setDataFetched(true);
       } catch (error) {
-        console.error('Error in fetching BE github data:', error);
+        console.log('Error in fetching BE github data:', error);
       }
     };
     useEffect(() => {

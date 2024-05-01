@@ -1,6 +1,7 @@
 const Auth = require('../../models/AuthModel');
 const bcrypt = require('bcryptjs');
 const authController = {};
+const axios = require('axios');
 
 /**
  * createUser - create and save a nAuth into the database.
@@ -67,6 +68,57 @@ authController.verifyUser = (req, res, next) => {
       });
     });
 };
+
+/** 
+ * fetching Github OAuth credentials
+ */
+authController.githubCredentials = async (req, res, next) => {
+  const { code } = req.query;
+  console.log('code from query', code);
+
+  const finalUrl = 'https://github.com/login/oauth/access_token';
+  const body = {
+    client_id: '6dae5c0c009f319f4252',
+    client_secret: '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6',
+    code,
+  };
+
+  try {
+    const { data: requestToken } = await axios.post(finalUrl, body, {
+      headers: { Accept: 'application/json' },
+      });
+
+      console.log('requestToken: ', requestToken)
+      const { access_token } = requestToken;
+
+      const apiUrl = 'https://api.github.com';
+      const { data: userdata } = await axios.get(`${apiUrl}/user`, {
+        headers: { Authorization: `token ${access_token}`},
+      });
+      console.log('user: ', userdata);
+
+      const { data: emailDataArr } = await axios.get(`${apiUrl}/user/emails`,{
+        headers: { Authorization: `token ${access_token}`},
+      });
+
+      console.log('user email: ', emailDataArr);
+      res.locals.user = userdata.login;
+      res.locals.email = emailDataArr[0].email;
+
+      // return res.status(200);
+      return next();
+      // return res.status(200).redirect('/home');
+    } catch (error) {
+      return next({
+        log: 'Express error handler caught error in authController.githubCredentials',
+        status: 500,
+        message: { error },
+      });
+    }
+    
+}
+
+
 
 authController.updateEmail = (req, res, next) => {
   const { email, newEmail } = res.locals.body;
