@@ -2,32 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const GITHUB_CLIENT_ID = '6dae5c0c009f319f4252';
-const GITHUB_CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
-const GITHUB_CALLBACK_URL = 'http://localhost:8080/callback';
-const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
-const GITHUB_AUTH_CODE_SERVER = 'https://github.com/login/oauth/authorize';
-const GITHUB_AUTH_TOKEN_URL = 'https://github.com/login/oauth/access_token';
-const GITHUB_API_SERVER = '/user';
-const AUTHORIZATION_CODE_URL = `${GITHUB_AUTH_CODE_SERVER}?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
+
 
 const Callback = (props) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState('');
   const [email, setEmail] = useState('');
-
-  useEffect(() => {
+  const [dataFetched, setDataFetched] = useState(false);
+  
+  
     const fetchData = async () => {
-      try {
-        const response = await axios.get('/callback');
+      
+      const location = new URL(window.location.href);
+      const code = location.searchParams.get('code');
+      console.log('code', code);
 
+      try {
+        // make GET request to /callbackgithub?code={code}
+        const response = await axios.get(`/callbackGithub?code=${code}`);
+        // console.log('response', response);
         if (response.status === 200) {
           // If the response is successful, extract the email from the response data
           console.log('response from BE: ', response);
           
-          setUser(response.data.user);
-          setEmail(response.data.email);
+          const { user, email } = response.data;
+
+          console.log('user: ', user);
+          console.log('email: ', email);
+        
+          setUser(user);
+
+          setEmail(email);
           // Set the current email using setCurrentEmail
           props.setCurrentEmail(email);
           // Redirect to the home page
@@ -36,14 +42,16 @@ const Callback = (props) => {
           // Handle error cases
           console.error('Error: Unable to fetch BE github data');
         }
+        setDataFetched(true);
       } catch (error) {
         console.error('Error in fetching BE github data:', error);
       }
     };
-
-    // Call the fetchData function when the component mounts
-    fetchData();
-  },[]);
+    useEffect(() => {
+    if (!dataFetched) {
+      fetchData();
+    }
+  }, [dataFetched])
 
   // const { code } = req.query;
 
@@ -184,7 +192,7 @@ const Callback = (props) => {
 //     }, []);
   
 
-  return <div> Logging in ... </div>
+  return <div> Loading... </div>
 };
 
 export default Callback;

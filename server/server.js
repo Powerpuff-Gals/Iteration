@@ -53,8 +53,9 @@ app.post('/signup', authController.createUser, (req, res) => {
 // const CLIENT_ID = '6dae5c0c009f319f4252';
 // const CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
 
-app.get('/callback', async (req, res) => {
+app.get('/callbackGithub', async (req, res) => {
   const { code } = req.query;
+  console.log('code from query', code);
 
   const finalUrl = 'https://github.com/login/oauth/access_token';
   const body = {
@@ -64,7 +65,7 @@ app.get('/callback', async (req, res) => {
   };
 
   try {
-    const { data: requestToken} = await axios.post(finalUrl, body, {
+    const { data: requestToken } = await axios.post(finalUrl, body, {
       headers: { Accept: 'application/json' },
       });
 
@@ -85,73 +86,18 @@ app.get('/callback', async (req, res) => {
       res.locals.user = userdata.login;
       res.locals.email = emailDataArr[0].email;
 
-      res.status(200).json({
+      // return res.status(200);
+      return res.status(200).json({
         user: res.locals.user,
         email: res.locals.email,
       })
-      // return res.status(201).redirect('/home');
+      // return res.status(200).redirect('/home');
     } catch (error) {
       console.error('Error in fetching access token', error);
       return res.redirect(500, 'Error in fetching access token')
     }
   });
-// app.post('/auth/github/callback', async (req, res) => {
-//   const { code } = req.body;
 
-//   const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Accept': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       client_id: CLIENT_ID,
-//       client_secret: CLIENT_SECRET,
-//       code,
-//     }),
-//   });
-
-//   const tokenData = await tokenResponse.json();
-//   const accessToken = tokenData.access_token;
-
-//   if (accessToken) {
-//     res.json({ success: true });
-//   } else {
-//     res.json({ success: false });
-//   }
-// });
-
-
-// using passport library for Github OAuth
-
-// passport.use(new GitHubStrategy({
-//   clientID: '6dae5c0c009f319f4252',
-//   clientSecret: '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6',
-//   callbackURL: 'http://localhost:8080/auth/github/callback'
-// },
-// function(acessToken, refreshToken, profile, done) {
-//   return done(null, profile);
-// }
-// ));
-
-// passport.serializeUser(function(user, done) {
-//   done(null, user);
-// });
-
-// passport.deserializeUser(function(obj, done) {
-//   done(null, obj);
-// });
-
-// app.use(passport.initialize());
-
-// app.get('/auth/github', 
-//   passport.authenticate('github'));
-
-// app.get('/auth/github/callback',
-//   passport.authenticate('github', { failureRedirect: '/login' }),
-//   function(req, res) {
-//     res.redirect('http://localhost:8080');
-//   });
 
 app.post(
   '/search',

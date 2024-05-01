@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
+import axios from 'axios';
 import logo from '../assets/wobbe_mascot2.png';
 
 function Login(props) {
@@ -113,166 +114,15 @@ function Login(props) {
   // https://github.com/login/oauth/authorize?client_id=6dae5c0c009f319f4252&redirect_uri=http://localhost:8080/callback
   const handleGithubLogin = () => {
     // window.location.assign(AUTHORIZATION_CODE_URL);
-    const redirectUri = encodeURIComponent(GITHUB_CALLBACK_URL);
-    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}`;
+    
+    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`;
 
     window.location.href = githubOAuthURL;
   };
   
-  // const handleGithubLogin = AUTHORIZATION_CODE_URL;
-
-  // Third try
-
-  // const handleGithubLogin = async (code) => {
-  //   try {
-  //     const data = await fetch('https://github.com/login/oauth/access_token', {
-  //       method: 'POST',
-  //       body: JSON.stringify({
-  //         client_id: GITHUB_CLIENT_ID,
-  //         client_secret: GITHUB_CLIENT_SECRET,
-  //         code,
-  //       }),
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     })
-  //     const response = await data.json();
-  //     console.log('data', response);
-  //     const accessToken = response.access_token;
   
-  //     // Fetch the user's Github profile
-  //     const userProfileResponse = await fetch('https://api.github.com/user', {
-  //       headers: {
-  //         'Authorization': `Bearer ${accessToken}`,
-  //         'User-Agent': 'Wobbejobs'
-  //       }
-  //     });
   
-  //     // Handle the user profile data
-  //     const userProfileData = await userProfileResponse.json();
-  //     console.log(`Welcome, ${userProfileData.name}`);
-  //     navigate('/home');
-  //   } catch (error) {
-  //     console.log('Error in GithubLogin', error);
-  //   }
-  // };
   
-  // const handleGitHubCallback = () => {
-  //   const queryString = window.location.search;
-  //   console.log('query string', queryString)
-  //   const urlParams = new URLSearchParams(queryString);
-  //   console.log('urlParams', urlParams)
-  //   const code = urlParams.get('code');
-  //   console.log('code', code);
-  
-  //   if (code) {
-  //     handleGithubLogin(code);
-  //   }
-  // };
-  
-  // useEffect(() => {
-  //   handleGitHubCallback();
-  // }, []);
-  
-
-  // second try
-
-  // useEffect(() => {
-  //   // Check for code parameter in URL
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const code = urlParams.get('code');
-    
-  //   if (code) {
-  //     // exchange code for access token
-  //     fetch('http://localhost:8080/auth/github/callback', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ code }),
-  //     })
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       console.log('GitHub login response:', data)
-  //       navigate('/home');
-  //     })
-  //     .catch(error => {
-  //       console.log('Github login error:', error);
-  //     })
-  //   }
-  // }, [navigate]) 
-
-
-  // First try
-
-  // const handleGithubLogin = () => {
-  //   console.log('Attempting GitHub login...');
-
-  //   const clientID = '6dae5c0c009f319f4252';
-  //   const redirectURI = 'http://localhost:8080/auth/github/callback';
-  //   window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${redirectURI}`;
-    
-  // };
-
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const code = urlParams.get('code');
-  //   console.log('code --->', code);
-
-  //   if (code) {
-  //     fetch('http://localhost:8080/auth/github/callback', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ code }),
-  //     })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log('data --->', data);
-  //       // setProfile(data);
-  //       console.log('data.email --->', data.email);
-  //       navigate('/home');
-  //     })
-  //     .catch((err) => console.log(err));
-  //   }
-  // })
-
-
-  
-
-  // log out function to log the user out of google and set the profile array to null
-  // const logOut = () => {
-  //     googleLogout();
-  //     setProfile(null);
-  // };
-
-
-  // function onSignIn(googleUser) {
-    
-  //   console.log(googleUser);
-  // }
-
-  // function signOut() {
-  //   var auth2 = gapi.auth2.getAuthInstance();
-  //   auth2.signOut().then(function () {
-  //     console.log('User signed out.');
-  //   });
-  // }
-
-  // function handleCredentialResponse(response) {
-  //   console.log("Encoded JWT ID token: " + response.credential);
-  // }
-  // window.onload = function () {
-  //   google.accounts.id.initialize({
-  //     client_id: "254528258088-dl9ikiuf975aelj7d07p8ashkbgl7kbs.apps.googleusercontent.com",
-  //     callback: handleCredentialResponse
-  //   });
-  //   google.accounts.id.renderButton(
-  //     document.getElementById("googleButton"),
-  //     { theme: "outline", size: "large" }  // customization attributes
-  //   );
-  //   google.accounts.id.prompt(); // also display the One Tap dialog
-  // }
-
-
-
 
   return (
  
