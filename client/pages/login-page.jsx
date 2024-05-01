@@ -6,55 +6,55 @@ import logo from '../assets/wobbe_mascot2.png';
 function Login(props) {
   const navigate = useNavigate();
 
-  const [ email, setEmail ] = useState('');
-  const [ password, setPassword ] = useState('');
-  const [ invalid, setInvalid] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [invalid, setInvalid] = useState(false);
 
   const auth = async () => {
     try {
-      const response = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           password,
         }),
       });
-      if(response.status === 200) {
+      if (response.status === 200) {
         props.setCurrentEmail(email);
         navigate('/home');
       } else {
         setInvalid(true);
       }
     } catch (error) {
-      console.log("Error scraping from Authentication:", error);
+      console.log('Error scraping from Authentication:', error);
     }
-  }
+  };
 
-  const handleLogin = (e) => {
+  const handleLogin = e => {
     e.preventDefault();
     auth();
   };
 
-  const handleNewAccount = (e) => {
+  const handleNewAccount = e => {
     e.preventDefault();
     navigate('/signup');
   };
 
-  const [ user, setUser ] = useState(null);
-  const [ profile, setProfile ] = useState([]);
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState([]);
 
   const login = useGoogleLogin({
-      onSuccess: (codeResponse) => {
-        console.log(codeResponse);
-        setUser(codeResponse)
-      },
-      onError: (error) => console.log('Login Failed:', error)
+    onSuccess: codeResponse => {
+      console.log('google login  ---->', codeResponse);
+      setUser(codeResponse);
+    },
+    onError: error => console.log('Login Failed:', error),
   });
 
-  const googleOnClick =() => {
+  const googleOnClick = () => {
     login();
-  }
+  };
 
   // const handleGithubLogin = () => {
 
@@ -72,46 +72,63 @@ function Login(props) {
 
   useEffect(() => {
     if (user) {
-      fetch(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-        method: 'GET',
-        // mode: 'no-cors',
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-          Accept: 'application/json',
-        //  "Cross-Origin-Opener-Policy": 'same-origin',
-        //  "Access-Control-Allow-Origin": 'http://localhost:8080',
+      fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+        {
+          method: 'GET',
+          // mode: 'no-cors',
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: 'application/json',
+            //  "Cross-Origin-Opener-Policy": 'same-origin',
+            //  "Access-Control-Allow-Origin": 'http://localhost:8080',
+          },
         }
-      })
-          .then(res => res.json())
-          .then((res) => {
-            console.log(res);
-            setProfile(res);
-            googleEmail(res.email);
-            console.log(res.email);
-            console.log(res.name);
-            // navigate('/home');
-          })
-          .catch((err) => console.log(err));
-    };
+      )
+        .then(res => res.json())
+        .then(res => {
+          console.log('res ----> ', res);
+          console.log('res.given_name ----> ', res.given_name);
+          props.setShowName(res.given_name);
+          setProfile(res);
+          googleEmail(res.email);
+          console.log(res.email);
+          console.log(res.name);
+          // navigate('/home');
+        })
+        .catch(err => console.log(err));
+    }
     // console.log(user);
     // console.log(profile);
-  }, [user])
+  }, [user]);
 
   function googleEmail(email) {
     console.log('google email: ', email);
-    if(email) {
+    if (email) {
       props.setCurrentEmail(email);
       navigate('/home');
     }
   }
 
   function handlePasswordVisibility() {
-    if(document.getElementById('password').getAttribute('type') === 'password') {
+    if (
+      document.getElementById('password').getAttribute('type') === 'password'
+    ) {
       document.getElementById('password').setAttribute('type', 'text');
-      document.getElementById('passwordImage').setAttribute('src', 'https://media.geeksforgeeks.org/wp-content/uploads/20210917150049/eyeslash.png')
+      document
+        .getElementById('passwordImage')
+        .setAttribute(
+          'src',
+          'https://media.geeksforgeeks.org/wp-content/uploads/20210917150049/eyeslash.png'
+        );
     } else {
       document.getElementById('password').setAttribute('type', 'password');
-      document.getElementById('passwordImage').setAttribute('src', 'https://media.geeksforgeeks.org/wp-content/uploads/20210917145551/eye.png')
+      document
+        .getElementById('passwordImage')
+        .setAttribute(
+          'src',
+          'https://media.geeksforgeeks.org/wp-content/uploads/20210917145551/eye.png'
+        );
     }
   }
 
@@ -121,9 +138,8 @@ function Login(props) {
   //     setProfile(null);
   // };
 
-
   // function onSignIn(googleUser) {
-    
+
   //   console.log(googleUser);
   // }
 
@@ -149,89 +165,104 @@ function Login(props) {
   //   google.accounts.id.prompt(); // also display the One Tap dialog
   // }
 
-
-
-
   return (
- 
     <div className="min-h-screen flex justify-center  items-center bg-gradient-to-br from-teal-50 via-cyan-100 to-green-200">
-      <div style={{zIndex:'30', position : 'absolute', left: '5%', top: '5%', fontFamily:'pacifico', color: 'white', fontSize:'4.25rem' }}>
+      <div
+        style={{
+          zIndex: '30',
+          position: 'absolute',
+          left: '5%',
+          top: '5%',
+          fontFamily: 'pacifico',
+          color: 'white',
+          fontSize: '4.25rem',
+        }}
+      >
         WobbeJobs
       </div>
-      
-      <header className="flex items-center justify-center h-screen overflow-hidden" />
-      
-        <video
-            autoPlay
-            loop
-            muted
-            className="absolute min-w-screen min-h-screen"
-        >
-            <source
 
-                src='../assets/AdobeStock_301424944[fish_flurry].mp4' 
-                type="video/mp4"
-            />
+      <header className="flex items-center justify-center h-screen overflow-hidden" />
+
+      <video autoPlay loop muted className="absolute min-w-screen min-h-screen">
+        <source
+          src="../assets/AdobeStock_301424944[fish_flurry].mp4"
+          type="video/mp4"
+        />
         Your browser does not support the video tag.
-        </video>
-        
+      </video>
+
       <div className="max-w-md w-full z-10 bg-white rounded-xl shadow-2xl p-8">
-        <div className='flex justify-center mt-[-150px]'>
-          <img src={logo} className='h-[250px] w-[250px]' alt= 'tasselled wobbegong shark'/>
+        <div className="flex justify-center mt-[-150px]">
+          <img
+            src={logo}
+            className="h-[250px] w-[250px]"
+            alt="tasselled wobbegong shark"
+          />
         </div>
         <h2 className="text-3xl font-semibold text-center text-gray-700 mt-[-50px] mb-8">
           Ready to hunt?
         </h2>
-        {invalid ? 
-        <div className='flex justify-center mb-4'>
-          <h3 className='px-2 py-1 bg-red-200 rounded-xl border border-red-500'>Invalid Credentials. Please try again</h3>
-        </div> : 
-        null}
+        {invalid ? (
+          <div className="flex justify-center mb-4">
+            <h3 className="px-2 py-1 bg-red-200 rounded-xl border border-red-500">
+              Invalid Credentials. Please try again
+            </h3>
+          </div>
+        ) : null}
         <div className="mb-4">
           <label className="block text-gray-700 ">Email:</label>
-          {invalid ? 
+          {invalid ? (
             <input
               type="email"
               id="email"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="pl-2 mt-1 block w-full border border-red-400 rounded-md shadow-sm"
               placeholder="Enter your email..."
-            /> :
+            />
+          ) : (
             <input
               type="email"
               id="email"
               name="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="pl-2 mt-1 block w-full rounded-md shadow-sm"
               placeholder="Enter your email..."
-            />}
-          </div>
+            />
+          )}
+        </div>
 
         <div className="mb-6">
           <label className="block text-gray-700">Password:</label>
-          {invalid ? 
+          {invalid ? (
             <input
               type="password"
               id="password"
               name="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               className="pl-2 mt-1 block w-full border border-red-400 rounded-md shadow-sm"
               placeholder="Enter your password"
-            /> : 
+            />
+          ) : (
             <input
               type="password"
               id="password"
               name="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               className="pl-2 mt-1 block w-full rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter your password"
-            />}
-            <img id='passwordImage' src='https://media.geeksforgeeks.org/wp-content/uploads/20210917145551/eye.png' className='h-5 w-5 inline-block ml-[93%] mt-[-13.75%]' onClick={handlePasswordVisibility}></img>
+            />
+          )}
+          <img
+            id="passwordImage"
+            src="https://media.geeksforgeeks.org/wp-content/uploads/20210917145551/eye.png"
+            className="h-5 w-5 inline-block ml-[93%] mt-[-13.75%]"
+            onClick={handlePasswordVisibility}
+          ></img>
           {/* <input
             type="password"
             id="password"
@@ -241,7 +272,6 @@ function Login(props) {
             className="pl-2 mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter your password"
           /> */}
-
         </div>
         <button
           onClick={handleLogin}
@@ -250,10 +280,18 @@ function Login(props) {
           Sign In
         </button>
 
-        <div className='w-full mt-2'>
-          <button aria-label="Sign in with Google" onClick={googleOnClick} className="flex w-full justify-center items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3">
+        <div className="w-full mt-2">
+          <button
+            aria-label="Sign in with Google"
+            onClick={googleOnClick}
+            className="flex w-full justify-center items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3"
+          >
             <div className="flex items-center justify-center bg-white w-9 h-9 rounded-l">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="w-5 h-5"
+              >
                 <title>Sign in with Google</title>
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -273,7 +311,9 @@ function Login(props) {
                 ></path>
               </svg>
             </div>
-            <span className="text-sm text-google-text-gray tracking-wider">Sign in with Google</span>
+            <span className="text-sm text-google-text-gray tracking-wider">
+              Sign in with Google
+            </span>
           </button>
         </div>
 
@@ -304,7 +344,7 @@ function Login(props) {
         </footer>
       </div>
     </div>
-  )
-};
+  );
+}
 
 export default Login;

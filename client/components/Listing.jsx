@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import zipRecruiterLogo from '../assets/images/zip.png';
 import indeedLogo from '../assets/images/indeed.png';
 import linkedinLogo from '../assets/images/Linkedin-Logo.wine.png';
@@ -12,6 +12,26 @@ const Listing = props => {
   } else {
     logoImage = indeedLogo;
   }
+
+  const handleSaveForLater = async e => {
+    e.preventDefault();
+    console.log('SAVE');
+
+    try {
+      const savedJob = await fetch('/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: props.title,
+          company: props.company,
+          salary: props.salary,
+          apply: props.apply,
+        }),
+      });
+    } catch (error) {
+      console.log('Error saving the job position:', error);
+    }
+  };
 
   return (
     <div className="bg-blue-300 border border-gray-400 w-[95%] flex justify-center items-center flex-col rounded-2xl mb-5 shadow-lg">
@@ -33,6 +53,12 @@ const Listing = props => {
           Apply Now
         </button>
       </a>
+      <button
+        className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white"
+        onClick={handleSaveForLater}
+      >
+        Save for Later
+      </button>
       {/* </form> */}
     </div>
   );
