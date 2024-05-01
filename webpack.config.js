@@ -31,18 +31,11 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
-        use: ['file-loader']
+        type: 'asset'
       },
       {
         test: /\.(mov|mp4)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }  
-          }
-        ]
+        type: 'asset'
       },    
     ],
   }, 
