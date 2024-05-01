@@ -99,6 +99,16 @@ app.post(
   }
 );
 
+app.post('/save', authController.updateSavedJobs, (req, res) => {
+  return res.status(200).json(res.locals.data);
+});
+
+app.get('/savedjobs', authController.renderSavedJobs, (req, res) => {
+  // console.log(req.params, 'request')
+  console.log('inside saved jobs route');
+  return res.status(200).json(res.locals.jobs);
+});
+
 app.use((req, res) => {
   return res
     .status(200)

@@ -88,7 +88,7 @@ searchController.searchZipRecruiter = async (req, res, next) => {
   } catch (error) {
     next({
       log: 'Error in searchController',
-      message: { error: 'Error in searchController'}
+      message: { error: 'Error in searchController' },
     });
   }
 };

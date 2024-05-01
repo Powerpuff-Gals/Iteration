@@ -36,6 +36,7 @@ const Callback = (props) => {
           setEmail(email);
           // Set the current email using setCurrentEmail
           props.setCurrentEmail(email);
+          props.setShowName(user);
           // Redirect to the home page
           navigate('/home');
         } else {
