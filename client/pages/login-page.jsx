@@ -110,7 +110,7 @@ function Login(props) {
   const GITHUB_AUTH_TOKEN_SERVER = 'https://github.com/login/oauth/access_token';
   const GITHUB_API_SERVER = '/user';
   const AUTHORIZATION_CODE_URL = `${GITHUB_AUTH_CODE_SERVER}?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
-
+  // https://github.com/login/oauth/authorize?client_id=6dae5c0c009f319f4252&redirect_uri=http://localhost:8080/callback
   const handleGithubLogin = () => {
     // window.location.assign(AUTHORIZATION_CODE_URL);
     const redirectUri = encodeURIComponent(GITHUB_CALLBACK_URL);

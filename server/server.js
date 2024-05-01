@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 const cors = require('cors');
+const axios = require('axios');
 // const bodyParser = require('body-parser');
 // const passport = require('passport');
 // const GitHubStrategy = require('passport-github').Strategy;
@@ -52,8 +53,48 @@ app.post('/signup', authController.createUser, (req, res) => {
 // const CLIENT_ID = '6dae5c0c009f319f4252';
 // const CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
 
+app.get('/callback', async (req, res) => {
+  const { code } = req.query;
 
+  const finalUrl = 'https://github.com/login/oauth/access_token';
+  const body = {
+    client_id: '6dae5c0c009f319f4252',
+    client_secret: '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6',
+    code,
+  };
 
+  try {
+    const { data: requestToken} = await axios.post(finalUrl, body, {
+      headers: { Accept: 'application/json' },
+      });
+
+      console.log('requestToken: ', requestToken)
+      const { access_token } = requestToken;
+
+      const apiUrl = 'https://api.github.com';
+      const { data: userdata } = await axios.get(`${apiUrl}/user`, {
+        headers: { Authorization: `token ${access_token}`},
+      });
+      console.log('user: ', userdata);
+
+      const { data: emailDataArr } = await axios.get(`${apiUrl}/user/emails`,{
+        headers: { Authorization: `token ${access_token}`},
+      });
+
+      console.log('user email: ', emailDataArr);
+      res.locals.user = userdata.login;
+      res.locals.email = emailDataArr[0].email;
+
+      res.status(200).json({
+        user: res.locals.user,
+        email: res.locals.email,
+      })
+      // return res.status(201).redirect('/home');
+    } catch (error) {
+      console.error('Error in fetching access token', error);
+      return res.redirect(500, 'Error in fetching access token')
+    }
+  });
 // app.post('/auth/github/callback', async (req, res) => {
 //   const { code } = req.body;
 
