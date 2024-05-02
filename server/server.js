@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 const cors = require('cors');
+const cookieSession = require('cookie-session');
 
 // const bodyParser = require('body-parser');
 // const passport = require('passport');
@@ -14,9 +15,7 @@ const indeedController = require('./controllers/indeedController');
 const shuffleController = require('./controllers/shuffleController');
 const linkedinController = require('./controllers/linkedinController');
 
-
 const mongoose = require('mongoose');
-
 
 mongoose.connect(
   'mongodb+srv://yjdream86:kaIPgggbzhC54eIT@powerpuffs.mnq5nje.mongodb.net/?retryWrites=true&w=majority&appName=PowerPuffs'
@@ -30,8 +29,23 @@ mongoose.connection.once('open', () => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, './../client')));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:8080',
+    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+    credentials: true,
+  })
+);
 
+app.use(
+  cookieSession({
+    name: 'SESSION_ID',
+    keys: ['keep secret'],
+
+    // Cookie Options
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  })
+);
 
 app.post('/login', authController.verifyUser, (req, res) => {
   if (res.locals.incorrect) {
@@ -41,6 +55,10 @@ app.post('/login', authController.verifyUser, (req, res) => {
   }
 });
 
+app.post('/logout', (req, res) => {
+  req.session = null;
+  return res.status(200).json({ message: 'bye bye' });
+});
 
 app.post('/signup', authController.createUser, (req, res) => {
   // console.log("res" + res)
@@ -57,9 +75,8 @@ app.get('/callbackGithub', authController.githubCredentials, (req, res) => {
   return res.status(200).json({
     user: res.locals.user,
     email: res.locals.email,
-  })
+  });
 });
-
 
 app.post(
   '/search',
@@ -99,17 +116,23 @@ app.post(
   }
 );
 
-app.post('/save', authController.updateSavedJobs, (req, res) => {
-  return res.status(200).json(res.locals.data);
-});
+app.post(
+  '/save',
+  authController.verifyUser,
+  authController.updateSavedJobs,
+  (req, res) => {
+    return res.status(200).json(res.locals.data);
+  }
+);
 
-app.get('/savedjobs', authController.renderSavedJobs, (req, res) => {
-  // console.log(req.params, 'request')
-  console.log('inside saved jobs route');
-  return res.status(200).json(res.locals.jobs);
-});
+app.get(
+  '/savedjobs/',
+  authController.verifyUser,
+  authController.renderSavedJobs
+);
 
 app.use((req, res) => {
+  console.log('default route');
   return res
     .status(200)
     .sendFile(path.join(__dirname, '../build/index.html'), err => {
@@ -127,6 +150,7 @@ app.use('*', (req, res) => {
 
 // Default middleware error
 app.use((err, req, res, next) => {
+  console.log('error middlware', err);
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 500,
