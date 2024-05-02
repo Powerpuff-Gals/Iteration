@@ -39,12 +39,9 @@ authController.createUser = async (req, res, next) => {
  * against the password stored in the database.
  */
 authController.verifyUser = (req, res, next) => {
-  console.log('not ugly');
   if (req.session && req.session.currentUser) {
-    console.log('good');
     return next();
   } else if (!req.body.email || !req.body.password) {
-    console.log('very bad');
     return res.status(403).json({ error: 'no credentials provided' });
   }
 

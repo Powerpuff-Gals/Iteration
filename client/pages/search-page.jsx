@@ -115,13 +115,13 @@ function Search(props) {
         Edit Profile
       </button>
       <button
-        className="bg-blue-500 absolute top-30 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-blue-500 absolute top-20 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
         onClick={handleSavedJobs}
       >
         Saved Jobs
       </button>
       <button
-        className="bg-blue-500 absolute top-70 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-blue-500 absolute top-30 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
         onClick={handleLogout}
       >
         Logout
