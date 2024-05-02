@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 const cors = require('cors');
-
+require('dotenv').config();
 // const bodyParser = require('body-parser');
 // const passport = require('passport');
 // const GitHubStrategy = require('passport-github').Strategy;

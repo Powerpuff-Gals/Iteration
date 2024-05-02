@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const authController = {};
 const axios = require('axios');
 
+
+
 /**
  * createUser - create and save a nAuth into the database.
  */
@@ -79,8 +81,8 @@ authController.githubCredentials = async (req, res, next) => {
 
   const finalUrl = 'https://github.com/login/oauth/access_token';
   const body = {
-    client_id: '6dae5c0c009f319f4252',
-    client_secret: '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6',
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
     code,
   };
 
