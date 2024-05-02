@@ -3,17 +3,21 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 const cors = require('cors');
+
+// const bodyParser = require('body-parser');
+// const passport = require('passport');
+// const GitHubStrategy = require('passport-github').Strategy;
+
 const authController = require('./controllers/authController');
 const searchController = require('./controllers/searchController');
 const indeedController = require('./controllers/indeedController');
 const shuffleController = require('./controllers/shuffleController');
-
-const mongoose = require('mongoose');
 const linkedinController = require('./controllers/linkedinController');
 
-// mongoose.connect(
-//   'mongodb+srv://wilson7chen:codesmith@scratch.67upbfi.mongodb.net/?retryWrites=true&w=majority&appName=Scratch'
-// );
+
+const mongoose = require('mongoose');
+
+
 mongoose.connect(
   'mongodb+srv://yjdream86:kaIPgggbzhC54eIT@powerpuffs.mnq5nje.mongodb.net/?retryWrites=true&w=majority&appName=PowerPuffs'
 );
@@ -22,24 +26,12 @@ mongoose.connection.once('open', () => {
   console.log('MONGO DB ---> Connected');
 });
 
-// mongoose.connection.on('open', () => {
-//   console.log('BROKE IT ---> MongDB is not working');
-// });
-
+// app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, './../client')));
 
 app.use(cors());
 
-// app.get('/', (req, res) => {
-//   // console.log('inside GET route');
-//   return res.status(200).json('GET inside the root endpoint ');
-// });
-
-// app.get('/login', (req, res) => {
-//   // console.log('inside LOGIN route');
-//   return res.status(200).json('Response from login');
-// });
 
 app.post('/login', authController.verifyUser, (req, res) => {
   if (res.locals.incorrect) {
@@ -49,10 +41,6 @@ app.post('/login', authController.verifyUser, (req, res) => {
   }
 });
 
-// app.get('/signup', (req, res) => {
-//   // console.log('inside SIGNUP route');
-//   return res.status(200).json('Response from signup');
-// });
 
 app.post('/signup', authController.createUser, (req, res) => {
   // console.log("res" + res)
@@ -61,10 +49,17 @@ app.post('/signup', authController.createUser, (req, res) => {
   return res.status(200).json('');
 });
 
-// app.get('/home', (req, res) => {
-//   console.log('inside HOME route');
-// return res.status(200).sendFile(path.join(__dirname, '../client/app.js'));
-// });
+// GitHub OAuth
+// const CLIENT_ID = '6dae5c0c009f319f4252';
+// const CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
+
+app.get('/callbackGithub', authController.githubCredentials, (req, res) => {
+  return res.status(200).json({
+    user: res.locals.user,
+    email: res.locals.email,
+  })
+});
+
 
 app.post(
   '/search',

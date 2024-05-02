@@ -5,6 +5,7 @@ module.exports = {
   entry: './client/app.js',
   output: {
     path: path.resolve(__dirname, 'build'),
+    // publicPath: '/',
     filename: 'bundle.js',
   },
   mode: 'development',
@@ -40,12 +41,12 @@ module.exports = {
     ],
   }, 
   devServer: {
+    historyApiFallback: true,
     static: {
       directory: path.resolve(__dirname, 'build'),
       publicPath: '/build',
-    },
-    historyApiFallback: true,
-   // port: 8080,
+    },    
+    port: 8080,
     proxy:[
       {
         context: ['/'],
@@ -57,6 +58,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Development',
       template: '/client/index.html',
+
     }),
   ]
 };
