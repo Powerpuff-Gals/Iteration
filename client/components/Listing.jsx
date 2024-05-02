@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import zipRecruiterLogo from '../assets/images/zip.png';
 import indeedLogo from '../assets/images/indeed.png';
 import linkedinLogo from '../assets/images/Linkedin-Logo.wine.png';
+var reactTable = require("react-table")
 
-const Listing = props => {
+const Listing = (props) => {
   let logoImage = null;
   if (props.source === 'ZipRecruiter') {
     logoImage = zipRecruiterLogo; // Assign the imported image directly
@@ -13,7 +14,7 @@ const Listing = props => {
     logoImage = indeedLogo;
   }
 
-  const handleSaveForLater = async e => {
+  const handleSaveForLater = async (e) => {
     e.preventDefault();
     console.log('SAVE');
 
@@ -33,33 +34,52 @@ const Listing = props => {
     }
   };
 
+  const columns = [
+    {
+        Header: 'Source',
+        accessor: 'source',
+    },
+    {
+        Header: 'Title',
+        accessor: 'title',
+    },
+    {
+        Header: 'Company',
+        accessor: 'company',
+    },
+    {
+        Header: 'Salary',
+        accessor: 'salary',
+    },
+    {
+        Header: 'Apply Now',
+        accessor: 'Apply Now',
+    },
+    {
+        Header: 'Save Job',
+        accessor: 'save job'
+    }
+  ]
+
   return (
-    <div className="bg-blue-300 border border-gray-400 w-[95%] flex justify-center items-center flex-col rounded-2xl mb-5 shadow-lg">
-      <label className="font-bold text-lg pt-4 text-wrap px-4 text-center">
-        {props.title}
-      </label>
-      <br />
-      <label className="text-md font-semibold text-white">
-        {props.company}
-      </label>
-      <br />
-      <label className="text-md text-white">Salary: {props.salary}</label>
-      <br />
-      <img className="w-auto h-8 mr-2 mb-4" src={logoImage} alt="Logo" />{' '}
-      {/* Render the image */}
-      {/* <form action={props.apply} target="_blank" className="mb-4"> */}
-      <a href={props.apply} target="_blank" className="mb-4">
-        <button className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white">
-          Apply Now
-        </button>
-      </a>
-      <button
-        className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white"
-        onClick={handleSaveForLater}
-      >
-        Save for Later
-      </button>
-      {/* </form> */}
+    <div>
+      <li>
+        <img width={100} height={100} src={logoImage} alt="logo" />
+        <p>
+          <b>{props.tile}</b>
+          {props.company}
+          Salary: {props.salary}
+          <button className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white">
+            Apply Now
+          </button>
+          <button
+            className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white"
+            onClick={handleSaveForLater}
+          >
+            Save for Later
+          </button>
+        </p>
+      </li>
     </div>
   );
 };
