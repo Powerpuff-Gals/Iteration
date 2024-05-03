@@ -127,8 +127,8 @@ function App() {
 const root = createRoot(document.querySelector('#root'));
 root.render(
   <StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </StrictMode>
 );
