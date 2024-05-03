@@ -107,6 +107,8 @@ function App() {
 const root = createRoot(document.querySelector('#root'));
 root.render(
   <StrictMode>
+    <BrowserRouter>
     <App />
+    </BrowserRouter>
   </StrictMode>
 );
