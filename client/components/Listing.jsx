@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import zipRecruiterLogo from '../assets/images/zip.png';
 import indeedLogo from '../assets/images/indeed.png';
 import linkedinLogo from '../assets/images/Linkedin-Logo.wine.png';
-var reactTable = require("react-table")
+import '../styles/searchList.css'
 
 const Listing = (props) => {
   let logoImage = null;
@@ -34,41 +34,23 @@ const Listing = (props) => {
     }
   };
 
-  const columns = [
-    {
-        Header: 'Source',
-        accessor: 'source',
-    },
-    {
-        Header: 'Title',
-        accessor: 'title',
-    },
-    {
-        Header: 'Company',
-        accessor: 'company',
-    },
-    {
-        Header: 'Salary',
-        accessor: 'salary',
-    },
-    {
-        Header: 'Apply Now',
-        accessor: 'Apply Now',
-    },
-    {
-        Header: 'Save Job',
-        accessor: 'save job'
-    }
-  ]
+
 
   return (
-    <div>
+    <div className="listItems">
+      <b>{props.title} <b>@ </b>
+      {props.company}
+      </b>
       <li>
-        <img width={100} height={100} src={logoImage} alt="logo" />
-        <p>
-          <b>{props.tile}</b>
-          {props.company}
-          Salary: {props.salary}
+       <a className='buttonContainer'>
+      <img width={100} height={100} src={logoImage} alt="logo" /> </a>
+      
+      <p>
+      Salary: {props.salary}
+      </p>
+    
+       <p>
+          <div className='buttonContainer'>
           <button className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white">
             Apply Now
           </button>
@@ -78,6 +60,7 @@ const Listing = (props) => {
           >
             Save for Later
           </button>
+          </div>
         </p>
       </li>
     </div>

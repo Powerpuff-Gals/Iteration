@@ -1,0 +1,21 @@
+.listItems {
+  color: aliceblue;
+  font-size: 20px;
+  background-color: #215487;
+  border-radius: 7px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+  }
+
+  li {
+    padding-top: 10px;
+    padding-left: 5px;
+    list-style-type: none;
+    background: #cce5ff;
+    color: darkblue;
+    margin: 5px;
+    border-radius: 10px;
+  }

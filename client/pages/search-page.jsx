@@ -173,7 +173,7 @@ function Search(props) {
         {searched ? (
           <div className="flex items-center justify-center w-[50%]">
             <div
-              className="flex flex-col items-center"
+              className="flex flex-col items-left"
               style={{ maxHeight: '550px', overflowY: 'scroll' }}
             >
               {listings}
