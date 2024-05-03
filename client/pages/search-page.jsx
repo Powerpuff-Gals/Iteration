@@ -6,6 +6,7 @@ const wobblegongImg = '../assets/wobbe_mascot2.png';
 const ocean = '../assets/AdobeStock_689555388_deepsea.jpeg';
 import nextPage from '../components/next-page.jsx';
 
+
 function Search(props) {
   const navigate = useNavigate();
   const [jobTitle, setJobTitle] = useState('');
@@ -81,15 +82,15 @@ function Search(props) {
   };
 
   return (
+   
     <div
       className="search-page min-h-screen"
       style={{
-        backgroundImage: `url('../assets/AdobeStock_689555388_deepsea.jpeg')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        height: '100vh',
+        backgroundColor: "#161748"
+        
       }}
     >
+    
       <div
         className="pl-[5%] pt-[5%]"
         style={{

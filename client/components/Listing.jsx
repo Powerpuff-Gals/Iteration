@@ -6,6 +6,11 @@ import '../styles/searchList.css'
 
 const Listing = (props) => {
   let logoImage = null;
+  let salary = "Salary: " + props.salary
+  if(props.salary === "N/A" || props.salary === "Salary not found"){
+    console.log("salary")
+    salary = "Salary not available"
+  }
   if (props.source === 'ZipRecruiter') {
     logoImage = zipRecruiterLogo; // Assign the imported image directly
   } else if (props.source === 'Linkedin') {
@@ -44,9 +49,9 @@ const Listing = (props) => {
       <li>
        <a className='buttonContainer'>
       <img width={100} height={100} src={logoImage} alt="logo" /> </a>
-      
+      Job Description
       <p>
-      Salary: {props.salary}
+      {salary}
       </p>
     
        <p>
