@@ -4,7 +4,7 @@ const path = require('path');
 const PORT = 3000;
 const cors = require('cors');
 const cookieSession = require('cookie-session');
-
+require('dotenv').config();
 // const bodyParser = require('body-parser');
 // const passport = require('passport');
 // const GitHubStrategy = require('passport-github').Strategy;

@@ -4,6 +4,7 @@ import { useGoogleLogin, googleLogout } from '@react-oauth/google';
 import axios from 'axios';
 import logo from '../assets/wobbe_mascot2.png';
 
+
 function Login(props) {
   const navigate = useNavigate();
 
@@ -23,6 +24,7 @@ function Login(props) {
       });
       if (response.status === 200) {
         props.setCurrentEmail(email);
+        props.setShowName(email);
         navigate('/home');
       } else {
         setInvalid(true);
@@ -120,19 +122,12 @@ function Login(props) {
   }
 
   // GitHub OAuth configuration
-  const GITHUB_CLIENT_ID = '6dae5c0c009f319f4252';
-  const GITHUB_CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
-  const GITHUB_CALLBACK_URL = 'http://localhost:8080/callback';
-  const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
-  const GITHUB_AUTH_CODE_SERVER = 'https://github.com/login/oauth/authorize';
-  const GITHUB_AUTH_TOKEN_SERVER = 'https://github.com/login/oauth/access_token';
-  const GITHUB_API_SERVER = '/user';
-  const AUTHORIZATION_CODE_URL = `${GITHUB_AUTH_CODE_SERVER}?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
-  // https://github.com/login/oauth/authorize?client_id=6dae5c0c009f319f4252&redirect_uri=http://localhost:8080/callback
+  const client_id = process.env.REACT_APP_GITHUB_CLIENT_ID;
+
   const handleGithubLogin = () => {
     // window.location.assign(AUTHORIZATION_CODE_URL);
     
-    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`;
+    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${client_id}`;
 
     window.location.href = githubOAuthURL;
   };

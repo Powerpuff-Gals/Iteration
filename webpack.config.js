@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './client/app.js',
@@ -38,8 +39,9 @@ module.exports = {
         test: /\.(mov|mp4)$/,
         type: 'asset'
       },    
-    ],
-  }, 
+    ],   
+  },
+   
   devServer: {
     historyApiFallback: true,
     static: {
@@ -52,7 +54,7 @@ module.exports = {
         context: ['/'],
         target: 'http://localhost:3000'
       }
-    ]
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -60,6 +62,7 @@ module.exports = {
       template: '/client/index.html',
 
     }),
+    new Dotenv()
   ]
 };
 
