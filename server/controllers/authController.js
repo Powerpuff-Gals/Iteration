@@ -1,4 +1,4 @@
-const Auth = require('../../models/AuthModel');
+const { Auth, SavedJob } = require('../../models/AuthModel');
 const bcrypt = require('bcryptjs');
 const authController = {};
 const axios = require('axios');
@@ -119,6 +119,27 @@ authController.githubCredentials = async (req, res, next) => {
       });
     }
     
+};
+
+authController.addGithubEmail = (req, res, next) => {
+  
+  SavedJob.findOne({ email : res.locals.email })
+    .then((data) => {
+      console.log('email -->', data)
+      if (!data) {
+        SavedJob.create({
+          email,
+        })
+      }
+      return next(); 
+    })
+    .catch(err => {
+      return next({
+        log: 'Express error handler caught error in authController.addGithubEmail',
+        status: 500,
+        message: { err },
+      });
+    });
 }
 
 
