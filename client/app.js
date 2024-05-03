@@ -31,7 +31,7 @@ function App() {
         });
         console.log('response', response);
         if (response.status === 403) {
-          return navigate('/login');
+          return navigate('/');
           // throw new Error('Failed to fetch saved jobs');
         }
         const data = await response.json();

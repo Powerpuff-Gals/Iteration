@@ -104,6 +104,7 @@ authController.githubCredentials = async (req, res, next) => {
     console.log('requestToken: ', requestToken);
     const { access_token } = requestToken;
 
+    
     const apiUrl = 'https://api.github.com';
     const { data: userdata } = await axios.get(`${apiUrl}/user`, {
       headers: { Authorization: `token ${access_token}` },
@@ -115,14 +116,12 @@ authController.githubCredentials = async (req, res, next) => {
     // });
 
     // console.log('user email: ', emailDataArr);
+    
     res.locals.user = userdata.login;
     // res.locals.email = emailDataArr[0].email;
-      // console.log('user email: ', emailDataArr);
-      res.locals.user = userdata.login;
-      // res.locals.email = emailDataArr[0].email;
-
+    
       // return res.status(200);
-      return next();
+    return next();
       // return res.status(200).redirect('/home');
     } catch (error) {
       return next({

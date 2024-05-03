@@ -24,6 +24,7 @@ function Login(props) {
       });
       if (response.status === 200) {
         props.setCurrentEmail(email);
+        props.setShowName(email);
         navigate('/home');
       } else {
         setInvalid(true);
