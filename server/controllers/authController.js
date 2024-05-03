@@ -1,4 +1,4 @@
-const { Auth, SavedJob } = require('../../models/AuthModel');
+const { Auth, Github } = require('../../models/AuthModel');
 const bcrypt = require('bcryptjs');
 const authController = {};
 const axios = require('axios');
@@ -123,11 +123,11 @@ authController.githubCredentials = async (req, res, next) => {
 
 authController.addGithubEmail = (req, res, next) => {
   
-  SavedJob.findOne({ email : res.locals.email })
+  Github.findOne({ email : res.locals.email })
     .then((data) => {
       console.log('email -->', data)
       if (!data) {
-        SavedJob.create({
+        Github.create({
           email,
         })
       }

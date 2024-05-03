@@ -34,20 +34,20 @@ authSchema.pre('save', async function (next) {
 const Auth = mongoose.model('auth', authSchema); 
 
 // savedjob schema using ref. email in auth model
-const savedJobSchema = new Schema ({
-  email : {
-    type: Schema.Types.ObjectId,
-    ref: 'auth',
+const githubSchema = new Schema ({
+  email: {
+    type: String,
     required: true,
+    unique: true,
   },
   savedJobs : {
     type : Array
   }
 });
 
-const SavedJob = mongoose.model('savedJob', savedJobSchema); 
+const Github = mongoose.model('github', githubSchema); 
 
 module.exports = {
   Auth,
-  SavedJob
+  Github
 };
