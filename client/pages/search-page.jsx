@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
 import Listing from '../components/Listing.jsx';
 import { Watch } from 'react-loader-spinner';
 const wobblegongImg = '../assets/wobbe_mascot2.png';
@@ -129,7 +130,7 @@ function Search(props) {
 
       <div className="flex justify-center">
         <h1 className="text-3xl font-semibold mb-4 text-white text-center">
-          Happy Hunting, <br /> {props.showName}
+          Happy Hunting, <br /> {useSelector((state) => state.users.username)}
         </h1>
       </div>
 

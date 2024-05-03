@@ -1,12 +1,8 @@
-import React, { StrictMode, useState, useEffect } from 'react';
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  useNavigate,
-  HashRouter,
-} from 'react-router-dom';
+import React, { StrictMode, useState } from 'react';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
+import { store } from './store.js';
 import Login from './pages/login-page.jsx';
 import Signup from './pages/signup-page.jsx';
 import Callback from './components/Callback.jsx';
@@ -17,38 +13,16 @@ import './styles/styles.css';
 import LandingPage from './pages/LandingPage.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+
+
 function App() {
   const [currentEmail, setCurrentEmail] = useState('');
   const [showName, setShowName] = useState('');
-  const [savedJobs, setSavedJobs] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchSavedJobs = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/savedjobs/`, {
-          credentials: 'include',
-        });
-        console.log('response', response);
-        if (response.status === 403) {
-          return navigate('/');
-          // throw new Error('Failed to fetch saved jobs');
-        }
-        const data = await response.json();
-        setSavedJobs(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchSavedJobs();
-  }, []);
-
+  
   return (
+    <Provider store={store}>
     <div>
       <GoogleOAuthProvider clientId="158691301488-8vvlfocfvkhl587aa4fdkf9cvrstev1s.apps.googleusercontent.com">
-        {/* <GoogleOAuthProvider clientId='254528258088-dl9ikiuf975aelj7d07p8ashkbgl7kbs.apps.googleusercontent.com'> */}
-
         <Routes>
           <Route index element={<LandingPage />}></Route>
           <Route
@@ -114,13 +88,15 @@ function App() {
                 setCurrentEmail={setCurrentEmail}
                 showName={showName}
                 setShowName={setShowName}
-                savedJobs={savedJobs}
+                // savedJobs={savedJobs}
+                // setSavedJobs={setSavedJobs}
               />
             }
           ></Route>
         </Routes>
       </GoogleOAuthProvider>
     </div>
+    </Provider>
   );
 }
 

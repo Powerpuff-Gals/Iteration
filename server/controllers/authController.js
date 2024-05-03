@@ -28,7 +28,7 @@ authController.createUser = async (req, res, next) => {
     return next({
       log: 'Express error handler caught error in authController.createUser',
       status: 500,
-      message: error.msg,
+      message: { error },
     });
   }
 };

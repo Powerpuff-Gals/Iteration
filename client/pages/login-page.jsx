@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { addUser, addUserEmail } from '../userSlice';
+import { useDispatch } from 'react-redux';
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
 import axios from 'axios';
 import logo from '../assets/wobbe_mascot2.png';
@@ -7,6 +9,7 @@ import logo from '../assets/wobbe_mascot2.png';
 
 function Login(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,8 +26,10 @@ function Login(props) {
         }),
       });
       if (response.status === 200) {
-        props.setCurrentEmail(email);
-        props.setShowName(email);
+        // props.setCurrentEmail(email);
+        // props.setShowName(email);
+        dispatch(addUser(email));
+        dispatch(addUserEmail(email));
         navigate('/home');
       } else {
         setInvalid(true);
@@ -51,6 +56,7 @@ function Login(props) {
     onSuccess: codeResponse => {
       console.log('google login  ---->', codeResponse);
       setUser(codeResponse);
+      dispatch(addUser(user));
     },
     onError: error => console.log('Login Failed:', error),
   });
@@ -79,6 +85,7 @@ function Login(props) {
           console.log('res ----> ', res);
           console.log('res.given_name ----> ', res.given_name);
           props.setShowName(res.given_name);
+          dispatch(addUser(res.given_name));
           setProfile(res);
           googleEmail(res.email);
           console.log(res.email);
@@ -95,6 +102,7 @@ function Login(props) {
     console.log('google email: ', email);
     if (email) {
       props.setCurrentEmail(email);
+      dispatch(addUserEmail(email));
       navigate('/home');
     }
   }
