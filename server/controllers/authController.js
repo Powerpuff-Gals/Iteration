@@ -2,6 +2,7 @@ const Auth = require('../../models/AuthModel');
 const bcrypt = require('bcryptjs');
 const authController = {};
 const axios = require('axios');
+const Cookies = require('js-cookie');
 
 /**
  * createUser - create and save a nAuth into the database.
@@ -38,7 +39,15 @@ authController.createUser = async (req, res, next) => {
  * against the password stored in the database.
  */
 authController.verifyUser = (req, res, next) => {
+  if (req.session && req.session.currentUser) {
+    return next();
+  } else if (!req.body.email || !req.body.password) {
+    return res.status(403).json({ error: 'no credentials provided' });
+  }
+
   const { email, password } = req.body;
+  console.log('EMAIL', email);
+
   Auth.find({ email })
     .then(data => {
       console.log(data);
@@ -57,11 +66,14 @@ authController.verifyUser = (req, res, next) => {
           res.locals.incorrect = true;
         } else {
           res.locals.user = data;
+
+          req.session.currentUser = email;
         }
         return next();
       });
     })
     .catch(err => {
+      console.log('error', err);
       return next({
         log: 'Express error handler caught error in authController.verifyUser',
         status: 500,
@@ -70,7 +82,7 @@ authController.verifyUser = (req, res, next) => {
     });
 };
 
-/** 
+/**
  * fetching Github OAuth credentials
  */
 authController.githubCredentials = async (req, res, next) => {
@@ -87,39 +99,36 @@ authController.githubCredentials = async (req, res, next) => {
   try {
     const { data: requestToken } = await axios.post(finalUrl, body, {
       headers: { Accept: 'application/json' },
-      });
+    });
 
-      console.log('requestToken: ', requestToken)
-      const { access_token } = requestToken;
+    console.log('requestToken: ', requestToken);
+    const { access_token } = requestToken;
 
-      const apiUrl = 'https://api.github.com';
-      const { data: userdata } = await axios.get(`${apiUrl}/user`, {
-        headers: { Authorization: `token ${access_token}`},
-      });
-      console.log('user: ', userdata);
+    const apiUrl = 'https://api.github.com';
+    const { data: userdata } = await axios.get(`${apiUrl}/user`, {
+      headers: { Authorization: `token ${access_token}` },
+    });
+    console.log('user: ', userdata);
 
-      const { data: emailDataArr } = await axios.get(`${apiUrl}/user/emails`,{
-        headers: { Authorization: `token ${access_token}`},
-      });
+    const { data: emailDataArr } = await axios.get(`${apiUrl}/user/emails`, {
+      headers: { Authorization: `token ${access_token}` },
+    });
 
-      console.log('user email: ', emailDataArr);
-      res.locals.user = userdata.login;
-      res.locals.email = emailDataArr[0].email;
+    console.log('user email: ', emailDataArr);
+    res.locals.user = userdata.login;
+    res.locals.email = emailDataArr[0].email;
 
-      // return res.status(200);
-      return next();
-      // return res.status(200).redirect('/home');
-    } catch (error) {
-      return next({
-        log: 'Express error handler caught error in authController.githubCredentials',
-        status: 500,
-        message: { error },
-      });
-    }
-    
-}
-
-
+    // return res.status(200);
+    return next();
+    // return res.status(200).redirect('/home');
+  } catch (error) {
+    return next({
+      log: 'Express error handler caught error in authController.githubCredentials',
+      status: 500,
+      message: { error },
+    });
+  }
+};
 
 authController.updateEmail = (req, res, next) => {
   const { email, newEmail } = res.locals.body;
@@ -179,10 +188,10 @@ authController.updatePassword = (req, res, next) => {
   }
 };
 authController.updateSavedJobs = async (req, res, next) => {
-  console.log('inside SAVE route!!!!!', req.body);
+  console.log('inside SAVE route!!!!!');
   const { email } = req.body;
   Auth.findOneAndUpdate(
-    { email: '234' },
+    { email: req.session.currentUser },
     { $push: { savedJobs: req.body } },
     next()
   ).catch(err => {
@@ -195,12 +204,13 @@ authController.updateSavedJobs = async (req, res, next) => {
 };
 authController.renderSavedJobs = (req, res, next) => {
   const { email } = req.body;
-  console.log('inside render saved jobs ', email);
-  Auth.find({ email: '234' })
+
+  console.log('inside render saved jobs ', req.session.currentUser);
+  Auth.find({ email: req.session.currentUser })
     .then(data => {
-      res.json(data[0].savedJobs);
-      console.log('data from database');
-      console.log(data[0].savedJobs);
+      return res.status(200).json(data[0].savedJobs);
+      // console.log('data from database');
+      // console.log(data[0].savedJobs);
     })
     .catch(err => res.json(err));
 };
