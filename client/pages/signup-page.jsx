@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { addUserEmail, addUser } from "../userSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 import logo from '../assets/wobbe_mascot2.png';
 
 function Signup(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -24,6 +27,9 @@ function Signup(props) {
     .then(response => {
       if (response.ok) {
         props.setCurrentEmail(email);
+        props.setShowName(email);
+        dispatch(addUser(email));
+        dispatch(addUserEmail(email));
         navigate('/home');
       }
     });
