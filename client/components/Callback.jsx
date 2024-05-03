@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { addUser, addUserEmail } from "../userSlice";
 import axios from 'axios';
 
 
 
 const Callback = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [user, setUser] = useState('');
   const [email, setEmail] = useState('');
@@ -35,8 +38,12 @@ const Callback = (props) => {
 
           setEmail(email);
           // Set the current email using setCurrentEmail
-          props.setCurrentEmail(email);
           props.setShowName(user);
+          props.setCurrentEmail(email);
+          
+          dispatch(addUser(user));
+          dispatch(addUserEmail(email));
+
           // Redirect to the home page
           navigate('/home');
         } else {
