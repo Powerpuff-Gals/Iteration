@@ -6,6 +6,8 @@ import { Watch } from 'react-loader-spinner';
 const wobblegongImg = '../assets/wobbe_mascot2.png';
 const ocean = '../assets/AdobeStock_689555388_deepsea.jpeg';
 import nextPage from '../components/next-page.jsx';
+import navBar from '../components/navbar.js';
+
 
 function Search(props) {
   const navigate = useNavigate();
@@ -82,21 +84,22 @@ function Search(props) {
   };
 
   return (
+   
     <div
       className="search-page min-h-screen"
       style={{
-        backgroundImage: `url('../assets/AdobeStock_689555388_deepsea.jpeg')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        height: '100vh',
+        backgroundColor: "#F7FAFC"
+        
       }}
     >
+      
+    
       <div
         className="pl-[5%] pt-[5%]"
         style={{
           zIndex: 30,
           fontFamily: 'pacifico',
-          color: 'white',
+          color: '#3F85F6',
           fontSize: '4rem',
         }}
       >
@@ -109,27 +112,30 @@ function Search(props) {
           className="h-[125px] w-[125px]"
         />
       </div>
+      <div class="flex flex-col items-end pr-10">
       <button
-        className="bg-blue-500 absolute top-10 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 w-32 h-10 mb-2"
         onClick={handleEditingProfile}
       >
         Edit Profile
       </button>
       <button
-        className="bg-blue-500 absolute top-20 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 w-32 h-10 mb-2"
         onClick={handleSavedJobs}
       >
         Saved Jobs
       </button>
       <button
-        className="bg-blue-500 absolute top-30 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 w-32 h-10 mb-2"
         onClick={handleLogout}
       >
         Logout
       </button>
+      </div>
+    
 
       <div className="flex justify-center">
-        <h1 className="text-3xl font-semibold mb-4 text-white text-center">
+        <h1 className="text-3xl font-pacifico font-semibold mb-4 text-blue-500 text-center">
           Happy Hunting, <br /> {useSelector((state) => state.users.username)}
         </h1>
       </div>
@@ -137,7 +143,7 @@ function Search(props) {
       <div className="mb-4 flex justify-center mt-8">
         <input
           type="text"
-          className="mr-2 pl-2 w-[15%] border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+          className="mr-2 pl-2 w-[15%] border-purple-600 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
           placeholder="Job Title..."
           value={jobTitle}
           onChange={e => setJobTitle(e.target.value)}
@@ -166,8 +172,9 @@ function Search(props) {
         >
           Search
         </button>
-      </div>
-
+        </div>
+     
+      
       <div className="flex justify-center">
         {loading ? (
           <div className="mt-40 flex justify-center">
@@ -181,12 +188,13 @@ function Search(props) {
               wrapperStyle={{}}
               wrapperClass=""
             />
+            
           </div>
         ) : null}
         {searched ? (
           <div className="flex items-center justify-center w-[50%]">
             <div
-              className="flex flex-col items-center"
+              className="flex flex-col items-left"
               style={{ maxHeight: '550px', overflowY: 'scroll' }}
             >
               {listings}
@@ -194,9 +202,10 @@ function Search(props) {
           </div>
         ) : null}
       </div>
-
+     
       <footer>{nextPage()}</footer>
     </div>
+    
   );
 }
 
