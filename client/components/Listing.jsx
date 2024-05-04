@@ -3,8 +3,11 @@ import zipRecruiterLogo from '../assets/images/zip.png';
 import indeedLogo from '../assets/images/indeed.png';
 import linkedinLogo from '../assets/images/Linkedin-Logo.wine.png';
 import '../styles/searchList.css'
+import { FaRegBookmark } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa";
 
 const Listing = (props) => {
+  const [icon, setIcon] = useState(FaRegBookmark);
   let logoImage = null;
   let salary = "Salary: " + props.salary
   if(props.salary === "N/A" || props.salary === "Salary not found"){
@@ -18,10 +21,12 @@ const Listing = (props) => {
   } else {
     logoImage = indeedLogo;
   }
+ 
 
   const handleSaveForLater = async (e) => {
     e.preventDefault();
     console.log('SAVE');
+    setIcon(FaBookmark);
 
     try {
       const savedJob = await fetch('/save', {
@@ -57,16 +62,17 @@ const Listing = (props) => {
        <p>
           <div className='buttonContainer'>
           <a href={props.apply} target="_blank" className="mb-4">
-          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 p-5">
-            Apply Now
+          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 p-5 w-32 h-10 mb-2">
+            Apply
           </button>
           </a>
           <button
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 p-5"
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 p-5 w-15 h-10 mb-2 ml-2"
             onClick={handleSaveForLater}
           >
-            Save 
+            {icon}
           </button>
+          
           </div>
         </p>
       </li>
