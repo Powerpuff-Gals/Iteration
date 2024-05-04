@@ -1,11 +1,37 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import logo from '../assets/wobbe_mascot2.png';
 import profilePic from '../assets/wobbe_mascot_profile.png';
 
 function SavedJobs(props) {
-  const navigate = useNavigate();
-  console.log('props?', props.savedJobs);
+  const [savedJobs, setSavedJobs] = useState([]);
+
+  // const navigate = useNavigate();
+  console.log('savedJobs', savedJobs);
+
+  
+    const fetchSavedJobs = async () => {
+      try {
+        const response = await fetch(`/savedjobs/data`, {
+          credentials: 'include',
+        });
+        console.log('response', response);
+        if (response.status === 403) {
+          throw new Error('Failed to fetch saved jobs');
+        }
+        const data = await response.json();
+        console.log('data', data);
+        setSavedJobs(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+  useEffect (() => {
+    fetchSavedJobs();
+  }, []);
+
   return (
     <div
       className="search-page min-h-screen"
@@ -39,15 +65,15 @@ function SavedJobs(props) {
       </div>
       <div className="flex justify-center">
         <h1 className="text-3xl font-semibold mb-4 text-white text-center">
-          List of your saved jobs, {props.showName}
+          List of your saved jobs, {useSelector((state) => state.users.username)}
         </h1>
       </div>
 
       <div className="flex justify-center">
         <div className="max-w-md w-full z-10 bg-white rounded-xl shadow-2xl p-6 bg-blue-200">
-          {props.savedJobs.length ? (
+          {savedJobs.length ? (
             <ul>
-              {props.savedJobs.map((job, index) => (
+              {savedJobs.map((job, index) => (
                 <li key={index}>
                   <p>Title: {job.title}</p>
                   <p>Company: {job.company}</p>

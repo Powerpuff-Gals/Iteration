@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
 import Listing from '../components/Listing.jsx';
 import { Watch } from 'react-loader-spinner';
 const wobblegongImg = '../assets/wobbe_mascot2.png';
@@ -22,7 +23,13 @@ function Search(props) {
     e.preventDefault();
     navigate('/savedjobs');
   };
-
+  const handleLogout = async e => {
+    e.preventDefault();
+    const response = await fetch('/logout', {
+      method: 'POST',
+    });
+    navigate('/login');
+  };
   const [listings, setListings] = useState([]);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -109,15 +116,21 @@ function Search(props) {
         Edit Profile
       </button>
       <button
-        className="bg-blue-500 absolute top-30 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-blue-500 absolute top-20 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
         onClick={handleSavedJobs}
       >
         Saved Jobs
       </button>
+      <button
+        className="bg-blue-500 absolute top-30 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
 
       <div className="flex justify-center">
         <h1 className="text-3xl font-semibold mb-4 text-white text-center">
-          Happy Hunting, <br /> {props.showName}
+          Happy Hunting, <br /> {useSelector((state) => state.users.username)}
         </h1>
       </div>
 
