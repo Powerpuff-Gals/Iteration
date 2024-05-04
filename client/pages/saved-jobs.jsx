@@ -35,19 +35,19 @@ function SavedJobs(props) {
   return (
     <div
       className="search-page min-h-screen"
-      style={{
-        backgroundImage: `url('../assets/AdobeStock_689555388_deepsea.jpeg')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        height: '100vh',
-      }}
+     
+        style={{
+          backgroundColor: "#F7FAFC"
+          
+        }}
+      
     >
       <div
         className="pl-[5%] pt-[5%]"
         style={{
           zIndex: 30,
           fontFamily: 'pacifico',
-          color: 'white',
+          color: '#3F85F6',
           fontSize: '4rem',
         }}
       >
@@ -64,7 +64,7 @@ function SavedJobs(props) {
         <img className="h-[80px] ml-[-37.5px]" src={profilePic}></img>
       </div>
       <div className="flex justify-center">
-        <h1 className="text-3xl font-semibold mb-4 text-white text-center">
+        <h1 className="text-3xl font-semibold mb-4 text-blue-500 text-center">
           List of your saved jobs, {useSelector((state) => state.users.username)}
         </h1>
       </div>
@@ -78,7 +78,8 @@ function SavedJobs(props) {
                   <p>Title: {job.title}</p>
                   <p>Company: {job.company}</p>
                   <p>Salary: {job.salary}</p>
-                  <p>Link to apply: {job.apply}</p>
+              
+                  <a href={job.apply} className="text-1xl font-pacifico font-bold mb-4 text-blue-500 text-center">Apply</a>
                   <br></br>
                 </li>
               ))}

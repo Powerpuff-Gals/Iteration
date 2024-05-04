@@ -1,10 +1,10 @@
 .listItems {
-  color:rgb(88, 28, 135);
+  color:#2A313D;
   font-size: 20px;
   background-color: white;
   border-radius: 4px;
  
-  border-bottom: 0.5rem solid rgb(88, 28, 135);
+  border-bottom: 0.3rem solid #2A313D;
 }
 
 .buttonContainer {
@@ -16,8 +16,8 @@
     padding-top: 10px;
     padding-left: 5px;
     list-style-type: none;
-    background: #rgb(216, 179, 254);
-    color: rgb(88, 28, 135);
+    background:white;
+    color: #2A313D;
     margin: 5px;
     border-radius: 10px;
   }

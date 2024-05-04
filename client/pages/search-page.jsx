@@ -88,7 +88,7 @@ function Search(props) {
     <div
       className="search-page min-h-screen"
       style={{
-        backgroundColor: "#f3e8ff"
+        backgroundColor: "#F7FAFC"
         
       }}
     >
@@ -99,7 +99,7 @@ function Search(props) {
         style={{
           zIndex: 30,
           fontFamily: 'pacifico',
-          color: 'purple-50',
+          color: '#3F85F6',
           fontSize: '4rem',
         }}
       >
@@ -114,19 +114,19 @@ function Search(props) {
       </div>
       <div class="flex flex-col items-end pr-10">
       <button
-        className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 w-32 h-10 mb-2"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 w-32 h-10 mb-2"
         onClick={handleEditingProfile}
       >
         Edit Profile
       </button>
       <button
-        className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 w-32 h-10 mb-2"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 w-32 h-10 mb-2"
         onClick={handleSavedJobs}
       >
         Saved Jobs
       </button>
       <button
-        className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 w-32 h-10 mb-2"
+        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 w-32 h-10 mb-2"
         onClick={handleLogout}
       >
         Logout
@@ -135,7 +135,7 @@ function Search(props) {
     
 
       <div className="flex justify-center">
-        <h1 className="text-3xl font-semibold mb-4 text-purple-500 text-center">
+        <h1 className="text-3xl font-pacifico font-semibold mb-4 text-blue-500 text-center">
           Happy Hunting, <br /> {useSelector((state) => state.users.username)}
         </h1>
       </div>
@@ -168,7 +168,7 @@ function Search(props) {
         />
         <button
           onClick={handleSearch}
-          className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500"
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
         >
           Search
         </button>

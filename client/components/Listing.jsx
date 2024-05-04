@@ -56,11 +56,13 @@ const Listing = (props) => {
     
        <p>
           <div className='buttonContainer'>
-          <button className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 p-5">
+          <a href={props.apply} target="_blank" className="mb-4">
+          <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 p-5">
             Apply Now
           </button>
+          </a>
           <button
-            className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 p-5"
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500 p-5"
             onClick={handleSaveForLater}
           >
             Save 
