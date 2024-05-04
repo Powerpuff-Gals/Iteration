@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
 import Listing from '../components/Listing.jsx';
 import { Watch } from 'react-loader-spinner';
 const wobblegongImg = '../assets/wobbe_mascot2.png';
 const ocean = '../assets/AdobeStock_689555388_deepsea.jpeg';
 import nextPage from '../components/next-page.jsx';
+import navBar from '../components/navbar.js';
 
 
 function Search(props) {
@@ -86,17 +88,18 @@ function Search(props) {
     <div
       className="search-page min-h-screen"
       style={{
-        backgroundColor: "#161748"
+        backgroundColor: "#f3e8ff"
         
       }}
     >
+      
     
       <div
         className="pl-[5%] pt-[5%]"
         style={{
           zIndex: 30,
           fontFamily: 'pacifico',
-          color: 'white',
+          color: 'purple-50',
           fontSize: '4rem',
         }}
       >
@@ -109,35 +112,38 @@ function Search(props) {
           className="h-[125px] w-[125px]"
         />
       </div>
+      <div class="flex flex-col items-end pr-10">
       <button
-        className="bg-blue-500 absolute top-10 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 w-32 h-10 mb-2"
         onClick={handleEditingProfile}
       >
         Edit Profile
       </button>
       <button
-        className="bg-blue-500 absolute top-20 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 w-32 h-10 mb-2"
         onClick={handleSavedJobs}
       >
         Saved Jobs
       </button>
       <button
-        className="bg-blue-500 absolute top-30 right-10 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+        className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 w-32 h-10 mb-2"
         onClick={handleLogout}
       >
         Logout
       </button>
+      </div>
+    
 
       <div className="flex justify-center">
-        <h1 className="text-3xl font-semibold mb-4 text-white text-center">
-          Happy Hunting, <br /> {props.showName}
+        <h1 className="text-3xl font-semibold mb-4 text-purple-500 text-center">
+          Happy Hunting, <br /> {useSelector((state) => state.users.username)}
         </h1>
       </div>
 
       <div className="mb-4 flex justify-center mt-8">
         <input
           type="text"
-          className="mr-2 pl-2 w-[15%] border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+          className="mr-2 pl-2 w-[15%] border-purple-600 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
           placeholder="Job Title..."
           value={jobTitle}
           onChange={e => setJobTitle(e.target.value)}
@@ -162,12 +168,13 @@ function Search(props) {
         />
         <button
           onClick={handleSearch}
-          className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-50 hover:text-blue-500"
+          className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500"
         >
           Search
         </button>
-      </div>
-
+        </div>
+     
+      
       <div className="flex justify-center">
         {loading ? (
           <div className="mt-40 flex justify-center">
@@ -181,6 +188,7 @@ function Search(props) {
               wrapperStyle={{}}
               wrapperClass=""
             />
+            
           </div>
         ) : null}
         {searched ? (
@@ -194,9 +202,10 @@ function Search(props) {
           </div>
         ) : null}
       </div>
-
+     
       <footer>{nextPage()}</footer>
     </div>
+    
   );
 }
 

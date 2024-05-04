@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { addUser, addUserEmail } from '../userSlice';
+import { useDispatch } from 'react-redux';
 import { useGoogleLogin, googleLogout } from '@react-oauth/google';
 import axios from 'axios';
 import logo from '../assets/wobbe_mascot2.png';
 
+
 function Login(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +26,10 @@ function Login(props) {
         }),
       });
       if (response.status === 200) {
-        props.setCurrentEmail(email);
+        // props.setCurrentEmail(email);
+        // props.setShowName(email);
+        dispatch(addUser(email));
+        dispatch(addUserEmail(email));
         navigate('/home');
       } else {
         setInvalid(true);
@@ -49,6 +56,7 @@ function Login(props) {
     onSuccess: codeResponse => {
       console.log('google login  ---->', codeResponse);
       setUser(codeResponse);
+      dispatch(addUser(user));
     },
     onError: error => console.log('Login Failed:', error),
   });
@@ -77,6 +85,7 @@ function Login(props) {
           console.log('res ----> ', res);
           console.log('res.given_name ----> ', res.given_name);
           props.setShowName(res.given_name);
+          dispatch(addUser(res.given_name));
           setProfile(res);
           googleEmail(res.email);
           console.log(res.email);
@@ -93,6 +102,7 @@ function Login(props) {
     console.log('google email: ', email);
     if (email) {
       props.setCurrentEmail(email);
+      dispatch(addUserEmail(email));
       navigate('/home');
     }
   }
@@ -120,19 +130,12 @@ function Login(props) {
   }
 
   // GitHub OAuth configuration
-  const GITHUB_CLIENT_ID = '6dae5c0c009f319f4252';
-  const GITHUB_CLIENT_SECRET = '9ecbb3de3dcf4b8e5eb2852f310355aa190168b6';
-  const GITHUB_CALLBACK_URL = 'http://localhost:8080/callback';
-  const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
-  const GITHUB_AUTH_CODE_SERVER = 'https://github.com/login/oauth/authorize';
-  const GITHUB_AUTH_TOKEN_SERVER = 'https://github.com/login/oauth/access_token';
-  const GITHUB_API_SERVER = '/user';
-  const AUTHORIZATION_CODE_URL = `${GITHUB_AUTH_CODE_SERVER}?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}`;
-  // https://github.com/login/oauth/authorize?client_id=6dae5c0c009f319f4252&redirect_uri=http://localhost:8080/callback
+  const client_id = process.env.REACT_APP_GITHUB_CLIENT_ID;
+
   const handleGithubLogin = () => {
     // window.location.assign(AUTHORIZATION_CODE_URL);
     
-    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}`;
+    const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${client_id}`;
 
     window.location.href = githubOAuthURL;
   };

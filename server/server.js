@@ -4,7 +4,7 @@ const path = require('path');
 const PORT = 3000;
 const cors = require('cors');
 const cookieSession = require('cookie-session');
-
+require('dotenv').config();
 // const bodyParser = require('body-parser');
 // const passport = require('passport');
 // const GitHubStrategy = require('passport-github').Strategy;
@@ -74,7 +74,7 @@ app.post('/signup', authController.createUser, (req, res) => {
 app.get('/callbackGithub', authController.githubCredentials, (req, res) => {
   return res.status(200).json({
     user: res.locals.user,
-    email: res.locals.email,
+    // email: res.locals.email,
   });
 });
 
@@ -126,7 +126,7 @@ app.post(
 );
 
 app.get(
-  '/savedjobs/',
+  '/savedjobs/data',
   authController.verifyUser,
   authController.renderSavedJobs
 );

@@ -56,14 +56,14 @@ const Listing = (props) => {
     
        <p>
           <div className='buttonContainer'>
-          <button className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white">
+          <button className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 p-5">
             Apply Now
           </button>
           <button
-            className="font-semibold rounded-full border bg-white p-2 hover:bg-blue-500 hover:text-white"
+            className="bg-purple-500 text-white font-bold py-2 px-4 rounded hover:bg-purple-50 hover:text-purple-500 p-5"
             onClick={handleSaveForLater}
           >
-            Save for Later
+            Save 
           </button>
           </div>
         </p>
