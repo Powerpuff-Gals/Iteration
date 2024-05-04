@@ -13,76 +13,89 @@ indeedController.searchIndeed = async (req, res, next) => {
     req.body.jobLocation,
     req.body.jobTitle
   );
-
-  const browser = await puppeteer.launch({
-    headless: true,
-    defaultViewport: false,
-  });
-
-  const page = await browser.newPage();
-  await page.goto(
-    `https://www.indeed.com/jobs?q=${req.body.jobTitle}&l=${req.body.jobLocation}&radius=${req.body.jobRadius}`
-  );
-
-  await page.screenshot({ path: 'indeed-screenshot.png' });
-
-  const data = await page.evaluate(() => {
-    const jobElements = document.querySelectorAll('.job_seen_beacon');
-    const results = [];
-
-    jobElements.forEach((jobElement) => {
-      const jobTitle = jobElement.querySelector('.jobTitle').textContent.trim();
-      console.log(jobTitle);
-
-      const priceTitleElement = jobElement.querySelector(
-        '.metadata.salary-snippet-container'
-      );
-
-      let priceTitle;
-
-      if (priceTitleElement !== null) {
-        const childPriceElement = priceTitleElement.querySelector(
-          '.css-1cvo3fd.eu4oa1w0'
-        );
-
-        priceTitle = childPriceElement.textContent.trim();
-      } else {
-        priceTitle = 'Salary not found';
-      }
-
-      const quickApplyLinkElement = jobElement.querySelector(
-        'a.jcs-JobTitle.css-jspxzf.eu4oa1w0'
-      );
-
-      const quickApplyLink = quickApplyLinkElement
-        ? quickApplyLinkElement.href
-        : 'quick apply condition';
-
-      const companyNameElement = jobElement.querySelector(
-        '.css-92r8pb.eu4oa1w0'
-      );
-      const companyName = companyNameElement
-        ? companyNameElement.textContent.trim()
-        : 'Company not found';
-
-      const src = 'Indeed';
-
-      results.push({
-        jobTitle,
-        priceTitle,
-        quickApplyLink,
-        companyName,
-        src,
-      });
+  try {
+    const browser = await puppeteer.launch({
+      headless: true,
+      defaultViewport: false,
     });
 
-    return results;
-  });
+    const page = await browser.newPage();
+    await page.goto(
+      `https://www.indeed.com/jobs?q=${req.body.jobTitle}&l=${req.body.jobLocation}&radius=${req.body.jobRadius}`
+    );
 
-  console.log('Results from indeedController DATA --->', data[0]);
-  res.locals.indeedResults = data;
-  await browser.close();
-  next();
+    await page.screenshot({ path: 'indeed-screenshot.png' });
+
+    const data = await page.evaluate(() => {
+      const jobElements = document.querySelectorAll('.job_seen_beacon');
+      const results = [];
+
+      jobElements.forEach(jobElement => {
+        const jobTitleElement = jobElement.querySelector('.jobTitle');
+
+        const jobTitle = jobTitleElement
+          ? jobTitleElement.textContent.trim()
+          : 'Job title not found';
+        // const jobTitle = jobElement.querySelector('.jobTitle').textContent.trim();
+        // console.log(jobTitle);
+
+        const priceTitleElement = jobElement.querySelector(
+          '.metadata.salary-snippet-container'
+        );
+        // let priceTitle;
+
+        // if (priceTitleElement !== null) {
+        //   const childPriceElement = priceTitleElement.querySelector(
+        //     '.css-1cvo3fd.eu4oa1w0'
+        //   );
+
+        //   priceTitle = childPriceElement.textContent.trim();
+        // } else {
+        //   priceTitle = 'Salary not found';
+        // }
+        const priceTitle = priceTitleElement
+          ? priceTitleElement.textContent.trim()
+          : 'N/A';
+
+        const quickApplyLinkElement = jobElement.querySelector(
+          'a.jcs-JobTitle.css-jspxzf.eu4oa1w0'
+        );
+
+        const quickApplyLink = quickApplyLinkElement
+          ? quickApplyLinkElement.href
+          : 'quick apply condition';
+
+        const companyNameElement = jobElement.querySelector(
+          '.css-92r8pb.eu4oa1w0'
+        );
+        const companyName = companyNameElement
+          ? companyNameElement.textContent.trim()
+          : 'Company not found';
+
+        const src = 'Indeed';
+
+        results.push({
+          jobTitle,
+          priceTitle,
+          quickApplyLink,
+          companyName,
+          src,
+        });
+      });
+
+      return results;
+    });
+
+    console.log('Results from indeedController DATA --->', data[0]);
+    res.locals.indeedResults = data;
+    await browser.close();
+    next();
+  } catch (error) {
+    next({
+      log: 'Error in indeedController',
+      message: { error: 'Error in indeedController' },
+    });
+  }
 };
 
 module.exports = indeedController;
