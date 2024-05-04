@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
 import logo from '../assets/wobbe_mascot2.png';
 import profilePic from '../assets/wobbe_mascot_profile.png';
 
@@ -31,6 +32,7 @@ function SavedJobs(props) {
   useEffect (() => {
     fetchSavedJobs();
   }, []);
+
 
   return (
     <div
@@ -79,7 +81,7 @@ function SavedJobs(props) {
                   <p>Company: {job.company}</p>
                   <p>Salary: {job.salary}</p>
               
-                  <a href={job.apply} className="text-1xl font-pacifico font-bold mb-4 text-blue-500 text-center">Apply</a>
+                  <a href={job.apply} target='_blank' rel='noopener noreferrer' className="text-1xl font-pacifico font-bold mb-4 text-blue-500 text-center">Apply</a>
                   <br></br>
                 </li>
               ))}
